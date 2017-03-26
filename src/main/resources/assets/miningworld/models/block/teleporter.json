@@ -1,0 +1,12 @@
+{
+    "parent": "block/cube_all",
+    "textures": {
+        "up": "blocks/log_oak_top",
+        "down": "blocks/log_oak_top",
+        "north": "miningworld:blocks/teleporter_side",
+        "south": "miningworld:blocks/teleporter_side",
+        "east": "miningworld:blocks/teleporter_side",
+        "west": "miningworld:blocks/teleporter_side",
+        "particle": "miningworld:blocks/teleporter_side"
+    }
+}
