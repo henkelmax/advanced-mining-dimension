@@ -3,9 +3,9 @@ package de.maxhenkel.miningworld.dimension;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.ChunkPrimer;
-import net.minecraft.world.gen.ChunkProviderOverworld;
+import net.minecraft.world.gen.ChunkGeneratorOverworld;
 
-public class ChunkProviderMining extends ChunkProviderOverworld{
+public class ChunkProviderMining extends ChunkGeneratorOverworld {
 
 	private int worldHeight;
 	

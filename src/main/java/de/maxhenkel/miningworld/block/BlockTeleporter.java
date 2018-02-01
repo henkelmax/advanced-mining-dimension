@@ -6,6 +6,7 @@ import de.maxhenkel.miningworld.tileentity.TileentityTeleporter;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -23,16 +24,16 @@ public class BlockTeleporter extends BlockContainer {
 		setHardness(3.0F);
 		setUnlocalizedName("teleporter");
 		setRegistryName("teleporter");
+		setCreativeTab(CreativeTabs.DECORATIONS);
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
-			EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if (!worldIn.isRemote) {
 			playerIn.setPositionAndUpdate(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
 			return transferPlayer(worldIn, pos, playerIn);
 		}else{
-			return false;
+			return true;
 		}
 	}
 
@@ -45,11 +46,11 @@ public class BlockTeleporter extends BlockContainer {
 		
 		if (playerMP.dimension == DimensionTypes.MINING_DIMENSION.getId()) {
 			playerMP.mcServer.getPlayerList().transferPlayerToDimension(playerMP, 0,
-					new TeleporterMiningDimension(playerMP.mcServer.worldServerForDimension(0)));
+					new TeleporterMiningDimension(playerMP.mcServer.getWorld(0)));
 		} else {
 			playerMP.mcServer.getPlayerList().transferPlayerToDimension(playerMP,
 					DimensionTypes.MINING_DIMENSION.getId(), new TeleporterMiningDimension(
-							playerMP.mcServer.worldServerForDimension(DimensionTypes.MINING_DIMENSION.getId())));
+							playerMP.mcServer.getWorld(DimensionTypes.MINING_DIMENSION.getId())));
 		}
 
 		return true;
