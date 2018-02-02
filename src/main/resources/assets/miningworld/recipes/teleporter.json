@@ -7,12 +7,12 @@
   ],
   "key": {
     "L": {
-      "item": "minecraft:log",
-      "data": 0
+      "type": "forge:ore_dict",
+      "ore": "logWood"
     },
     "P": {
-      "item": "minecraft:planks",
-      "data": 0
+      "type": "forge:ore_dict",
+      "ore": "plankWood"
     },
     "I": {
       "item": "minecraft:stone_pickaxe",
