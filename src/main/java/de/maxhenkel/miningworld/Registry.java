@@ -49,9 +49,6 @@ public class Registry {
 
 	@SubscribeEvent
 	public void registerRecipes(RegistryEvent.Register<IRecipe> event) {
-		GameRegistry.addShapedRecipe(new ResourceLocation(Main.MODID, "teleporter"), null,
-				new ItemStack(ModBlocks.TELEPORTER), new Object[] { "LPL", "PIP", "LPL",
-						Character.valueOf('L'), Blocks.LOG, Character.valueOf('P'), Blocks.PLANKS, Character.valueOf('I'), Items.STONE_PICKAXE });
 
 	}
 
@@ -60,7 +57,7 @@ public class Registry {
 		registerBlock(event.getRegistry(), ModBlocks.TELEPORTER);
 
 		GameRegistry.registerTileEntity(TileentityTeleporter.class, "TileentityTeleporter");
-	}
+    }
 
 	@SubscribeEvent
 	public static void registerItems(RegistryEvent.Register<Item> event) {
