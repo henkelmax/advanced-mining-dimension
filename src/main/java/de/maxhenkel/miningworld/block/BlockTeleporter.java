@@ -33,45 +33,8 @@ public class BlockTeleporter extends BlockContainer {
 		if (!worldIn.isRemote) {
 
 			if(playerIn instanceof EntityPlayerMP){
-			    new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        for(int i=3; i>=0; i--){
-                            if(i<=0){
-                                playerIn.getServer().addScheduledTask(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        ((EntityPlayerMP) playerIn).world.playSound(null, pos, SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.BLOCKS, 0.5F, 1.5F);
-                                        playerIn.sendStatusMessage(new TextComponentString(" "), true);
-                                    }
-                                });
-                            }else{
-                                int finalI = i;
-                                playerIn.getServer().addScheduledTask(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        ((EntityPlayerMP) playerIn).world.playSound(null, pos, SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.BLOCKS, 0.5F, 1F);
-                                        playerIn.sendStatusMessage(new TextComponentString(String.valueOf(finalI)), true);
-                                    }
-                                });
-                            }
-                            try {
-                                Thread.sleep(1000);
-                            } catch (InterruptedException e) {}
-                        }
-                        playerIn.getServer().addScheduledTask(new Runnable() {
-                            @Override
-                            public void run() {
-                                if(pos.getDistance((int)playerIn.posX, (int)playerIn.posY, (int)playerIn.posZ)>3D){
-                                    playerIn.sendStatusMessage(new TextComponentTranslation("message.too_far"), true);
-                                }else{
-                                    playerIn.setPositionAndUpdate(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
-                                    transferPlayer((EntityPlayerMP) playerIn);
-                                }
-                            }
-                        });
-                    }
-                }).start();
+                playerIn.setPositionAndUpdate(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
+                transferPlayer((EntityPlayerMP) playerIn);
 			    return true;
             }
             return true;
