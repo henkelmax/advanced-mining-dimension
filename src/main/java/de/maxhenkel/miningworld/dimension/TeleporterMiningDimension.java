@@ -14,11 +14,11 @@ public class TeleporterMiningDimension extends TeleporterBase {
 
 	@Override
 	public void placeInPortal(Entity entity, float rotationYaw) {
-
-		TileentityTeleporter teleporter = findPortalInChunk(world.getChunkFromBlockCoords(entity.getPosition()));
+		BlockPos teleporterPos=new BlockPos(-entity.posX, 64, -entity.posZ);
+		TileentityTeleporter teleporter = findPortalInChunk(world.getChunkFromBlockCoords(teleporterPos));
 
 		if (teleporter == null) {
-			BlockPos pos = world.getTopSolidOrLiquidBlock(new BlockPos(entity.getPosition().getX(), 64, entity.getPosition().getZ()));
+			BlockPos pos = world.getTopSolidOrLiquidBlock(teleporterPos);
 
 			if (world.isAirBlock(pos)) {
 				world.setBlockState(pos, ModBlocks.TELEPORTER.getDefaultState(), 3);

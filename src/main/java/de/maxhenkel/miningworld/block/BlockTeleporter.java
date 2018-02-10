@@ -9,18 +9,19 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 
 public class BlockTeleporter extends BlockContainer {
 
 	public BlockTeleporter() {
-		super(Material.ROCK);
+		super(Material.WOOD);
 		setHardness(3.0F);
 		setUnlocalizedName("teleporter");
 		setRegistryName("teleporter");
@@ -30,20 +31,60 @@ public class BlockTeleporter extends BlockContainer {
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if (!worldIn.isRemote) {
-			playerIn.setPositionAndUpdate(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
-			return transferPlayer(worldIn, pos, playerIn);
+
+			if(playerIn instanceof EntityPlayerMP){
+			    new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        for(int i=3; i>=0; i--){
+                            if(i<=0){
+                                playerIn.getServer().addScheduledTask(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        ((EntityPlayerMP) playerIn).world.playSound(null, pos, SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.BLOCKS, 0.5F, 1.5F);
+                                        playerIn.sendStatusMessage(new TextComponentString(" "), true);
+                                    }
+                                });
+                            }else{
+                                int finalI = i;
+                                playerIn.getServer().addScheduledTask(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        ((EntityPlayerMP) playerIn).world.playSound(null, pos, SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.BLOCKS, 0.5F, 1F);
+                                        playerIn.sendStatusMessage(new TextComponentString(String.valueOf(finalI)), true);
+                                    }
+                                });
+                            }
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException e) {}
+                        }
+                        playerIn.getServer().addScheduledTask(new Runnable() {
+                            @Override
+                            public void run() {
+                                if(pos.getDistance((int)playerIn.posX, (int)playerIn.posY, (int)playerIn.posZ)>3D){
+                                    playerIn.sendStatusMessage(new TextComponentTranslation("message.too_far"), true);
+                                }else{
+                                    playerIn.setPositionAndUpdate(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
+                                    transferPlayer((EntityPlayerMP) playerIn);
+                                }
+                            }
+                        });
+                    }
+                }).start();
+			    return true;
+            }
+            return true;
 		}else{
 			return true;
 		}
 	}
 
-	public boolean transferPlayer(final World world, BlockPos pos, EntityPlayer player) {
-		if (player.isRiding() || player.isBeingRidden() || !(player instanceof EntityPlayerMP)) {
+	public boolean transferPlayer(EntityPlayerMP playerMP) {
+		if (playerMP.isRiding() || playerMP.isBeingRidden()) {
 			return false;
 		}
 
-		EntityPlayerMP playerMP = (EntityPlayerMP) player;
-		
 		if (playerMP.dimension == DimensionTypes.MINING_DIMENSION.getId()) {
 			playerMP.mcServer.getPlayerList().transferPlayerToDimension(playerMP, 0,
 					new TeleporterMiningDimension(playerMP.mcServer.getWorld(0)));
