@@ -14,7 +14,10 @@ public class TeleporterMiningDimension extends TeleporterBase {
 
 	@Override
 	public void placeInPortal(Entity entity, float rotationYaw) {
-		BlockPos teleporterPos=new BlockPos(-entity.posX, 64, -entity.posZ);
+		if(entity.world.isRemote){
+			return;
+		}
+		BlockPos teleporterPos=new BlockPos(-entity.posX, 0, -entity.posZ);
 		TileentityTeleporter teleporter = findPortalInChunk(world.getChunkFromBlockCoords(teleporterPos));
 
 		if (teleporter == null) {
