@@ -20,54 +20,54 @@ import net.minecraft.world.World;
 
 public class BlockTeleporter extends BlockContainer {
 
-	public BlockTeleporter() {
-		super(Material.WOOD);
-		setHardness(3.0F);
-		setUnlocalizedName("teleporter");
-		setRegistryName("teleporter");
-		setCreativeTab(CreativeTabs.DECORATIONS);
-	}
+    public BlockTeleporter() {
+        super(Material.WOOD);
+        setHardness(3.0F);
+        setUnlocalizedName("teleporter");
+        setRegistryName("teleporter");
+        setCreativeTab(CreativeTabs.DECORATIONS);
+    }
 
-	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		if (!worldIn.isRemote) {
+    @Override
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        if (!worldIn.isRemote) {
 
-			if(playerIn instanceof EntityPlayerMP){
+            if (playerIn instanceof EntityPlayerMP) {
                 playerIn.setPositionAndUpdate(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
                 transferPlayer((EntityPlayerMP) playerIn);
-			    return true;
+                return true;
             }
             return true;
-		}else{
-			return true;
-		}
-	}
+        } else {
+            return true;
+        }
+    }
 
-	public boolean transferPlayer(EntityPlayerMP playerMP) {
-		if (playerMP.isRiding() || playerMP.isBeingRidden()) {
-			return false;
-		}
+    public boolean transferPlayer(EntityPlayerMP playerMP) {
+        if (playerMP.isRiding() || playerMP.isBeingRidden()) {
+            return false;
+        }
 
-		if (playerMP.dimension == DimensionTypes.MINING_DIMENSION.getId()) {
-			playerMP.mcServer.getPlayerList().transferPlayerToDimension(playerMP, 0,
-					new TeleporterMiningDimension(playerMP.mcServer.getWorld(0)));
-		} else {
-			playerMP.mcServer.getPlayerList().transferPlayerToDimension(playerMP,
-					DimensionTypes.MINING_DIMENSION.getId(), new TeleporterMiningDimension(
-							playerMP.mcServer.getWorld(DimensionTypes.MINING_DIMENSION.getId())));
-		}
+        if (playerMP.dimension == DimensionTypes.MINING_DIMENSION.getId()) {
+            playerMP.mcServer.getPlayerList().transferPlayerToDimension(playerMP, 0,
+                    new TeleporterMiningDimension(playerMP.mcServer.getWorld(0)));
+        } else {
+            playerMP.mcServer.getPlayerList().transferPlayerToDimension(playerMP,
+                    DimensionTypes.MINING_DIMENSION.getId(), new TeleporterMiningDimension(
+                            playerMP.mcServer.getWorld(DimensionTypes.MINING_DIMENSION.getId())));
+        }
 
-		return true;
-	}
+        return true;
+    }
 
-	@Override
-	public TileEntity createNewTileEntity(World worldIn, int meta) {
-		return new TileentityTeleporter();
-	}
+    @Override
+    public TileEntity createNewTileEntity(World worldIn, int meta) {
+        return new TileentityTeleporter();
+    }
 
-	@Override
-	public EnumBlockRenderType getRenderType(IBlockState state) {
-		return EnumBlockRenderType.MODEL;
-	}
+    @Override
+    public EnumBlockRenderType getRenderType(IBlockState state) {
+        return EnumBlockRenderType.MODEL;
+    }
 
 }

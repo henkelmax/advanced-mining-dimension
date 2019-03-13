@@ -9,41 +9,40 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
-@Mod(modid = Main.MODID, version = Main.VERSION, acceptedMinecraftVersions=Main.MC_VERSION)
-public class Main{
-	
-    public static final String MODID = "miningworld";
-    public static final String VERSION = "1.1.1";
-    public static final String MC_VERSION = "[1.12.2]";
-    public static final int VERSION_NUMBER = 3;
+@Mod(modid = Main.MODID, version = Main.VERSION, acceptedMinecraftVersions = Main.MC_VERSION)
+public class Main {
 
-	@Instance
+    public static final String MODID = "miningworld";
+    public static final String VERSION = "1.1.2";
+    public static final String MC_VERSION = "[1.12.2]";
+
+    @Instance
     private static Main instance;
 
-	@SidedProxy(clientSide="de.maxhenkel.miningworld.proxy.ClientProxy", serverSide="de.maxhenkel.miningworld.proxy.CommonProxy")
+    @SidedProxy(clientSide = "de.maxhenkel.miningworld.proxy.ClientProxy", serverSide = "de.maxhenkel.miningworld.proxy.CommonProxy")
     public static CommonProxy proxy;
-    
-	public Main() {
-		instance=this;
-	}
-	
-    @EventHandler
-    public void preinit(FMLPreInitializationEvent event){
-		proxy.preinit(event);
+
+    public Main() {
+        instance = this;
     }
-    
+
     @EventHandler
-    public void init(FMLInitializationEvent event){
-    	 proxy.init(event);
+    public void preinit(FMLPreInitializationEvent event) {
+        proxy.preinit(event);
     }
-    
+
     @EventHandler
-    public void postinit(FMLPostInitializationEvent event){
-		proxy.postinit(event);
+    public void init(FMLInitializationEvent event) {
+        proxy.init(event);
     }
-    
-	public static Main instance() {
-		return instance;
-	}
-	
+
+    @EventHandler
+    public void postinit(FMLPostInitializationEvent event) {
+        proxy.postinit(event);
+    }
+
+    public static Main instance() {
+        return instance;
+    }
+
 }
