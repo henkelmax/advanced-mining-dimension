@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "LPL",
+    "PIP",
+    "LPL"
+  ],
+  "key": {
+    "L": {
+      "tag": "minecraft:logs"
+    },
+    "P": {
+      "tag": "minecraft:planks"
+    },
+    "I": {
+      "item": "minecraft:stone_pickaxe"
+    }
+  },
+  "result": {
+    "item": "mining_dimension:teleporter",
+    "count": 1
+  },
+  "mirrored": true
+}

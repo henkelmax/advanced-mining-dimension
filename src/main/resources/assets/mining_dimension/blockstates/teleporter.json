@@ -1,0 +1,5 @@
+{
+    "variants": {
+        "": { "model": "mining_dimension:block/teleporter" }
+    }
+}

@@ -1,6 +1,0 @@
-{
-    "variants": {
-        "normal": { "model": "miningworld:teleporter" },
-        "inventory": { "model": "miningworld:teleporter" }
-    }
-}
