@@ -1,0 +1,1 @@
+- Fixed a bug preventing to use the teleporter in multiplayer
