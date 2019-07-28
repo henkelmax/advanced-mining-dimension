@@ -99,7 +99,7 @@ public class BlockTeleporter extends Block implements ITileEntityProvider, IItem
             for (int x = 0; x < 16; x++) {
                 for (int z = 0; z < 16; z++) {
                     pos.setPos(x, y, z);
-                    if (chunk.getBlockState(pos).isAir() && chunk.getBlockState(pos.up(1)).isAir()) {
+                    if (chunk.getBlockState(pos).isAir() && chunk.getBlockState(pos.up(1)).isAir() && chunk.getBlockState(pos.up(2)).isAir()) {
                         BlockPos absolutePos = chunk.getPos().getBlock(pos.getX(), pos.getY(), pos.getZ());
                         world.setBlockState(absolutePos, ModBlocks.TELEPORTER.getDefaultState());
                         return absolutePos;
@@ -112,19 +112,31 @@ public class BlockTeleporter extends Block implements ITileEntityProvider, IItem
             for (int x = 0; x < 16; x++) {
                 for (int z = 0; z < 16; z++) {
                     pos.setPos(x, y, z);
-                    if (isAirOrStone(chunk, pos) && isAirOrStone(chunk, pos.up(1))) {
+                    if (isAirOrStone(chunk, pos) && isAirOrStone(chunk, pos.up(1)) && isAirOrStone(chunk, pos.up(2))) {
                         BlockPos absolutePos = chunk.getPos().getBlock(pos.getX(), pos.getY(), pos.getZ());
-                        if (isReplaceable(world, absolutePos.up(1).offset(Direction.NORTH)) &&
+                        if (isReplaceable(world, absolutePos.up(3)) &&
+                                isReplaceable(world, absolutePos.up(1).offset(Direction.NORTH)) &&
+                                isReplaceable(world, absolutePos.up(1).offset(Direction.NORTH)) &&
                                 isReplaceable(world, absolutePos.up(1).offset(Direction.SOUTH)) &&
                                 isReplaceable(world, absolutePos.up(1).offset(Direction.EAST)) &&
-                                isReplaceable(world, absolutePos.up(1).offset(Direction.WEST))
+                                isReplaceable(world, absolutePos.up(1).offset(Direction.WEST)) &&
+                                isReplaceable(world, absolutePos.up(2).offset(Direction.NORTH)) &&
+                                isReplaceable(world, absolutePos.up(2).offset(Direction.SOUTH)) &&
+                                isReplaceable(world, absolutePos.up(2).offset(Direction.EAST)) &&
+                                isReplaceable(world, absolutePos.up(2).offset(Direction.WEST))
                         ) {
                             world.setBlockState(absolutePos, ModBlocks.TELEPORTER.getDefaultState());
                             world.setBlockState(absolutePos.up(1), Blocks.AIR.getDefaultState());
+                            world.setBlockState(absolutePos.up(2), Blocks.AIR.getDefaultState());
+                            world.setBlockState(absolutePos.up(3), Blocks.AIR.getDefaultState());
                             world.setBlockState(absolutePos.up(1).offset(Direction.NORTH), Blocks.STONE.getDefaultState());
                             world.setBlockState(absolutePos.up(1).offset(Direction.SOUTH), Blocks.STONE.getDefaultState());
                             world.setBlockState(absolutePos.up(1).offset(Direction.EAST), Blocks.STONE.getDefaultState());
                             world.setBlockState(absolutePos.up(1).offset(Direction.WEST), Blocks.STONE.getDefaultState());
+                            world.setBlockState(absolutePos.up(2).offset(Direction.NORTH), Blocks.STONE.getDefaultState());
+                            world.setBlockState(absolutePos.up(2).offset(Direction.SOUTH), Blocks.STONE.getDefaultState());
+                            world.setBlockState(absolutePos.up(2).offset(Direction.EAST), Blocks.STONE.getDefaultState());
+                            world.setBlockState(absolutePos.up(2).offset(Direction.WEST), Blocks.STONE.getDefaultState());
                             return absolutePos;
                         }
                     }
