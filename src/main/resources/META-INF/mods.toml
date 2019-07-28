@@ -1,13 +1,13 @@
 modLoader="javafml"
 loaderVersion="${mod_forge_version}"
-issueTrackerURL="http://maxhenkel.de"
-displayURL="http://maxhenkel.de"
+issueTrackerURL="https://www.curseforge.com/minecraft/mc-mods/advanced-mining-dimension/issues"
+displayURL="https://www.curseforge.com/minecraft/mc-mods/advanced-mining-dimension"
 authors="${mod_vendor}"
 [[mods]]
 modId="${mod_id}"
 version="${mod_version}"
 displayName="${mod_name}"
-updateJSONURL="http://maxhenkel.de/update/miningworld.json"
+updateJSONURL="http://maxhenkel.de/update/mining_dimension.json"
 description=''' '''
 [[dependencies.${mod_id}]]
     modId="forge"
