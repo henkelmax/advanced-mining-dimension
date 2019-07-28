@@ -128,7 +128,7 @@ public class BlockTeleporter extends Block implements ITileEntityProvider, IItem
                             world.setBlockState(absolutePos, ModBlocks.TELEPORTER.getDefaultState());
                             world.setBlockState(absolutePos.up(1), Blocks.AIR.getDefaultState());
                             world.setBlockState(absolutePos.up(2), Blocks.AIR.getDefaultState());
-                            world.setBlockState(absolutePos.up(3), Blocks.AIR.getDefaultState());
+                            world.setBlockState(absolutePos.up(3), Blocks.STONE.getDefaultState());
                             world.setBlockState(absolutePos.up(1).offset(Direction.NORTH), Blocks.STONE.getDefaultState());
                             world.setBlockState(absolutePos.up(1).offset(Direction.SOUTH), Blocks.STONE.getDefaultState());
                             world.setBlockState(absolutePos.up(1).offset(Direction.EAST), Blocks.STONE.getDefaultState());
