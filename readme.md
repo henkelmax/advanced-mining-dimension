@@ -2,7 +2,7 @@
 
 This mod adds a highly configurable dimension that only consists of caves.
 
-Creating the teleporter only requires very basic resources to make is accessible very early in game.
+Creating the teleporter only requires very basic resources to make it accessible very early in game.
 
 ## Teleporter
 
