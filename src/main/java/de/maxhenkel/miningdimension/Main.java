@@ -59,7 +59,6 @@ public class Main {
         dim.setRegistryName(new ResourceLocation(Main.MODID, "mining_world"));
 
         MINING_DIMENSION_TYPE = DimensionManager.registerDimension(new ResourceLocation(Main.MODID, "mining_world"), dim, new PacketBuffer(Unpooled.buffer()), true);
-        MINING_DIMENSION_TYPE.setRegistryName(new ResourceLocation(Main.MODID, "mining_world"));
     }
 
     @SubscribeEvent
