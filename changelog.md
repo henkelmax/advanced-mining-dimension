@@ -1,1 +1,1 @@
-- Removed client config
+- Fixed modded ores not spawning
