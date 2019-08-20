@@ -42,3 +42,7 @@ If ores should be generated
 
 `Lava`
 If lava should be generated in caves below level 11
+
+## Translations
+
+`zh_cn` [aikinitt](https://www.curseforge.com/members/aikinitt)

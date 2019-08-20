@@ -1,1 +1,1 @@
-- Fixed modded ores not spawning
+- Added zh_cn translation
