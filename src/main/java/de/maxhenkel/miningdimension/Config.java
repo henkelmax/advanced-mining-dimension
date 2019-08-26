@@ -16,17 +16,10 @@ public class Config {
     public static final ServerConfig SERVER;
     public static final ForgeConfigSpec SERVER_SPEC;
 
-    public static final ClientConfig CLIENT;
-    public static final ForgeConfigSpec CLIENT_SPEC;
-
     static {
         Pair<ServerConfig, ForgeConfigSpec> specPairServer = new ForgeConfigSpec.Builder().configure(ServerConfig::new);
         SERVER_SPEC = specPairServer.getRight();
         SERVER = specPairServer.getLeft();
-
-        Pair<ClientConfig, ForgeConfigSpec> specPairClient = new ForgeConfigSpec.Builder().configure(ClientConfig::new);
-        CLIENT_SPEC = specPairClient.getRight();
-        CLIENT = specPairClient.getLeft();
     }
 
     public static class ServerConfig {
@@ -38,12 +31,6 @@ public class Config {
             GENERATE_STONE_VARIANTS = builder.define("world_generation.stone_variants", true);
             GENERATE_ORES = builder.define("world_generation.ores", true);
             GENERATE_LAVA = builder.comment("If lava should be generated in caves below level 11").define("world_generation.lava", true);
-        }
-    }
-
-    public static class ClientConfig {
-        public ClientConfig(ForgeConfigSpec.Builder builder) {
-
         }
     }
 

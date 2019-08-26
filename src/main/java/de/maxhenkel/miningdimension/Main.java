@@ -6,10 +6,8 @@ import de.maxhenkel.miningdimension.dimension.CaveWorldCarver;
 import de.maxhenkel.miningdimension.dimension.MiningBiome;
 import de.maxhenkel.miningdimension.dimension.ModDimensionMining;
 import de.maxhenkel.miningdimension.tileentity.TileentityTeleporter;
-import io.netty.buffer.Unpooled;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
-import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
@@ -18,8 +16,8 @@ import net.minecraft.world.gen.carver.WorldCarver;
 import net.minecraft.world.gen.feature.ProbabilityConfig;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.ModDimension;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.event.world.RegisterDimensionsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -32,7 +30,7 @@ public class Main {
 
     public static final String MODID = "mining_dimension";
 
-    public static DimensionType MINING_DIMENSION_TYPE;
+    public static ModDimension MINING_DIMENSION;
     public static TileEntityType TELEPORTER_TILEENTITY;
     public static MiningBiome MINING_BIOME;
     public static CaveWorldCarver CAVE_CARVER;
@@ -45,20 +43,14 @@ public class Main {
         FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(TileEntityType.class, this::registerTileEntities);
         FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(Biome.class, this::registerBiomes);
         FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(WorldCarver.class, this::registerCarver);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onRegisterDimensions);
+        FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(ModDimension.class, this::registerDimension);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::commonSetup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::configEvent);
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, Config.SERVER_SPEC);
-        // ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, Config.CLIENT_SPEC);
-    }
 
-    @SubscribeEvent
-    public void onRegisterDimensions(RegisterDimensionsEvent event) {
-        ModDimensionMining dim = new ModDimensionMining();
-        dim.setRegistryName(new ResourceLocation(Main.MODID, "mining_world"));
-
-        MINING_DIMENSION_TYPE = DimensionManager.registerDimension(new ResourceLocation(Main.MODID, "mining_world"), dim, new PacketBuffer(Unpooled.buffer()), true);
+        MINING_DIMENSION = new ModDimensionMining();
+        MINING_DIMENSION.setRegistryName(new ResourceLocation(Main.MODID, "mining_world"));
     }
 
     @SubscribeEvent
@@ -110,5 +102,19 @@ public class Main {
         CANYON_CARVER = new CanyonWorldCarver(ProbabilityConfig::deserialize);
         CANYON_CARVER.setRegistryName(new ResourceLocation(Main.MODID, "canyon_carver"));
         event.getRegistry().register(CANYON_CARVER);
+    }
+
+    @SubscribeEvent
+    public void registerDimension(RegistryEvent.Register<ModDimension> event) {
+        event.getRegistry().register(MINING_DIMENSION);
+        DimensionManager.registerDimension(MINING_DIMENSION.getRegistryName(), MINING_DIMENSION, null, true);
+    }
+
+    public static DimensionType getMiningDimension() {
+        return DimensionType.byName(Main.MINING_DIMENSION.getRegistryName());
+    }
+
+    public static DimensionType getOverworldDimension() {
+        return DimensionType.byName(DimensionType.OVERWORLD.getRegistryName());
     }
 }

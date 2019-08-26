@@ -1,1 +1,1 @@
-- Added zh_cn translation
+- Fixed players couldn't login when in mining dimension

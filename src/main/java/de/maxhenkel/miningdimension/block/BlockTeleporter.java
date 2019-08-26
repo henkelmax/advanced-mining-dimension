@@ -49,8 +49,8 @@ public class BlockTeleporter extends Block implements ITileEntityProvider, IItem
             return false;
         }
 
-        if (playerMP.dimension.equals(Main.MINING_DIMENSION_TYPE)) {
-            ServerWorld teleportWorld = playerMP.server.getWorld(DimensionType.OVERWORLD);
+        if (playerMP.dimension.equals(Main.getMiningDimension())) {
+            ServerWorld teleportWorld = playerMP.server.getWorld(Main.getOverworldDimension());
 
             Chunk chunk = (Chunk) teleportWorld.getChunk(pos);
             BlockPos teleporterPos = findPortalInChunk(chunk);
@@ -63,8 +63,8 @@ public class BlockTeleporter extends Block implements ITileEntityProvider, IItem
             }
 
             playerMP.teleport(playerMP.server.getWorld(DimensionType.OVERWORLD), teleporterPos.getX() + 0.5D, teleporterPos.getY() + 1D, teleporterPos.getZ() + 0.5D, playerMP.rotationYaw, playerMP.rotationPitch);
-        } else if (playerMP.dimension.equals(DimensionType.OVERWORLD)) {
-            ServerWorld teleportWorld = playerMP.server.getWorld(Main.MINING_DIMENSION_TYPE);
+        } else if (playerMP.dimension.equals(Main.getOverworldDimension())) {
+            ServerWorld teleportWorld = playerMP.server.getWorld(Main.getMiningDimension());
 
             Chunk chunk = (Chunk) teleportWorld.getChunk(pos);
             BlockPos teleporterPos = findPortalInChunk(chunk);
