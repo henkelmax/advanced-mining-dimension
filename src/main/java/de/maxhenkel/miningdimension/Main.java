@@ -31,6 +31,7 @@ public class Main {
     public static final String MODID = "mining_dimension";
 
     public static ModDimension MINING_DIMENSION;
+    public static DimensionType MINING_DIMENSION_TYPE;
     public static TileEntityType TELEPORTER_TILEENTITY;
     public static MiningBiome MINING_BIOME;
     public static CaveWorldCarver CAVE_CARVER;
@@ -44,6 +45,7 @@ public class Main {
         FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(Biome.class, this::registerBiomes);
         FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(WorldCarver.class, this::registerCarver);
         FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(ModDimension.class, this::registerDimension);
+        FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(DimensionType.class, this::registerDimensionType);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::commonSetup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::configEvent);
 
@@ -107,7 +109,12 @@ public class Main {
     @SubscribeEvent
     public void registerDimension(RegistryEvent.Register<ModDimension> event) {
         event.getRegistry().register(MINING_DIMENSION);
-        DimensionManager.registerDimension(MINING_DIMENSION.getRegistryName(), MINING_DIMENSION, null, true);
+        MINING_DIMENSION_TYPE = DimensionManager.registerDimension(MINING_DIMENSION.getRegistryName(), MINING_DIMENSION, null, true);
+    }
+
+    @SubscribeEvent
+    public void registerDimensionType(RegistryEvent.Register<DimensionType> event) {
+        event.getRegistry().register(MINING_DIMENSION_TYPE);
     }
 
     public static DimensionType getMiningDimension() {
