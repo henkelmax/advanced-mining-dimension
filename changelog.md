@@ -1,1 +1,1 @@
-- Fixed players couldn't login when in mining dimension
+- Fixed issues with the teleporter
