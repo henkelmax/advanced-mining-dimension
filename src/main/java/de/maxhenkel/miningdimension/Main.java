@@ -118,10 +118,12 @@ public class Main {
     }
 
     public static DimensionType getMiningDimension() {
-        return DimensionType.byName(Main.MINING_DIMENSION.getRegistryName());
+        DimensionType type = DimensionType.byName(Main.MINING_DIMENSION.getRegistryName());
+        return type == null ? MINING_DIMENSION_TYPE : type;
     }
 
     public static DimensionType getOverworldDimension() {
-        return DimensionType.byName(DimensionType.OVERWORLD.getRegistryName());
+        DimensionType type = DimensionType.byName(DimensionType.OVERWORLD.getRegistryName());
+        return type == null ? DimensionType.OVERWORLD : type;
     }
 }
