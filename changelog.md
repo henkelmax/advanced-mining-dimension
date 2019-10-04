@@ -1,1 +1,1 @@
-- Fixed issues with the teleporter (AGAIN)
+- Added missing translation for mining dimension biome
