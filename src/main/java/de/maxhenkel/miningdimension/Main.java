@@ -24,11 +24,15 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 @Mod(Main.MODID)
 public class Main {
 
     public static final String MODID = "mining_dimension";
+
+    public static final Logger LOGGER = LogManager.getLogger(MODID);
 
     public static ModDimension MINING_DIMENSION;
     public static DimensionType MINING_DIMENSION_TYPE;
@@ -119,11 +123,17 @@ public class Main {
 
     public static DimensionType getMiningDimension() {
         DimensionType type = DimensionType.byName(Main.MINING_DIMENSION.getRegistryName());
-        return type == null ? MINING_DIMENSION_TYPE : type;
+        if (type == null) {
+            LOGGER.error("Could not find mining dimension");
+            LOGGER.debug("Listing available dimensions:");
+            for (DimensionType t : DimensionType.getAll()) {
+                LOGGER.debug("  - {} with id {}", t.getRegistryName(), t.getId());
+            }
+        }
+        return type;
     }
 
     public static DimensionType getOverworldDimension() {
-        DimensionType type = DimensionType.byName(DimensionType.OVERWORLD.getRegistryName());
-        return type == null ? DimensionType.OVERWORLD : type;
+        return DimensionType.byName(DimensionType.OVERWORLD.getRegistryName());
     }
 }
