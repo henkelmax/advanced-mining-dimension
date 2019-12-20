@@ -5,6 +5,7 @@ import de.maxhenkel.miningdimension.Config;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.IChunk;
 import net.minecraft.world.gen.feature.ProbabilityConfig;
 
@@ -20,7 +21,7 @@ public class CaveWorldCarver extends net.minecraft.world.gen.carver.CaveWorldCar
     }
 
     @Override
-    protected boolean carveBlock(IChunk chunk, BitSet carvingMask, Random rand, BlockPos.MutableBlockPos pos, BlockPos.MutableBlockPos pos1, BlockPos.MutableBlockPos pos2, int i1, int i2, int i3, int posX, int posZ, int i6, int posY, int i8, AtomicBoolean aBoolean) {
+    protected boolean func_225556_a_(IChunk chunk, Function<BlockPos, Biome> biome, BitSet carvingMask, Random rand, BlockPos.Mutable pos, BlockPos.Mutable pos1, BlockPos.Mutable pos2, int i1, int i2, int i3, int posX, int posZ, int i6, int posY, int i8, AtomicBoolean aBoolean) {
         int i = i6 | i8 << 4 | posY << 8;
         if (carvingMask.get(i)) {
             return false;

@@ -8,6 +8,7 @@ import net.minecraft.world.chunk.IChunk;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.OverworldGenSettings;
+import net.minecraft.world.gen.WorldGenRegion;
 
 public class ChunkGeneratorMining extends ChunkGenerator {
 
@@ -19,8 +20,8 @@ public class ChunkGeneratorMining extends ChunkGenerator {
     }
 
     @Override
-    public void generateSurface(IChunk chunk) {
-        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+    public void func_225551_a_(WorldGenRegion genRegion, IChunk chunk) {
+        BlockPos.Mutable pos = new BlockPos.Mutable();
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
                 chunk.setBlockState(pos.setPos(x, height, z), Blocks.BEDROCK.getDefaultState(), false);
@@ -35,7 +36,7 @@ public class ChunkGeneratorMining extends ChunkGenerator {
 
     @Override
     public void makeBase(IWorld world, IChunk chunk) {
-        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+        BlockPos.Mutable pos = new BlockPos.Mutable();
 
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {

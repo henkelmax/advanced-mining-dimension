@@ -1,1 +1,1 @@
-- Added missing translation for mining dimension biome
+- Updated to 1.15.1

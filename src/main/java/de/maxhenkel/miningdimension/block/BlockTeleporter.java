@@ -11,6 +11,7 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
@@ -37,11 +38,11 @@ public class BlockTeleporter extends Block implements ITileEntityProvider, IItem
     }
 
     @Override
-    public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult result) {
+    public ActionResultType func_225533_a_(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult result) {
         if (player instanceof ServerPlayerEntity) {
             transferPlayer((ServerPlayerEntity) player, pos);
         }
-        return true;
+        return ActionResultType.SUCCESS;
     }
 
     public boolean transferPlayer(ServerPlayerEntity playerMP, BlockPos pos) {
@@ -94,7 +95,7 @@ public class BlockTeleporter extends Block implements ITileEntityProvider, IItem
     }
 
     private BlockPos placeTeleporterMining(ServerWorld world, Chunk chunk) {
-        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+        BlockPos.Mutable pos = new BlockPos.Mutable();
         for (int y = 0; y < 255; y++) {
             for (int x = 0; x < 16; x++) {
                 for (int z = 0; z < 16; z++) {
@@ -165,7 +166,7 @@ public class BlockTeleporter extends Block implements ITileEntityProvider, IItem
     }
 
     private BlockPos placeTeleporterOverworld(ServerWorld world, Chunk chunk) {
-        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+        BlockPos.Mutable pos = new BlockPos.Mutable();
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
                 for (int y = 63; y < 255; y++) {

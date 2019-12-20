@@ -18,7 +18,7 @@ public class MiningDimension extends OverworldDimension {
 
     @Override
     public ChunkGenerator<? extends GenerationSettings> createChunkGenerator() {
-        SingleBiomeProviderSettings settings = new SingleBiomeProviderSettings();
+        SingleBiomeProviderSettings settings = new SingleBiomeProviderSettings(world.getWorldInfo());
         settings.setBiome(Main.MINING_BIOME);
         SingleBiomeProvider provider = new SingleBiomeProvider(settings);
         OverworldGenSettings overworldGenSettings = new OverworldGenSettings();
