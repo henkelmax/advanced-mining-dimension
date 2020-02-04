@@ -38,7 +38,7 @@ public class BlockTeleporter extends Block implements ITileEntityProvider, IItem
     }
 
     @Override
-    public ActionResultType func_225533_a_(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult result) {
+    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult result) {
         if (player instanceof ServerPlayerEntity) {
             transferPlayer((ServerPlayerEntity) player, pos);
         }
