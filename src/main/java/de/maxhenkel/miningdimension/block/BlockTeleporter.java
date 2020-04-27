@@ -17,10 +17,10 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nullable;
@@ -63,7 +63,7 @@ public class BlockTeleporter extends Block implements ITileEntityProvider, IItem
                 return true;
             }
 
-            playerMP.teleport(playerMP.server.getWorld(DimensionType.OVERWORLD), teleporterPos.getX() + 0.5D, teleporterPos.getY() + 1D, teleporterPos.getZ() + 0.5D, playerMP.rotationYaw, playerMP.rotationPitch);
+            playerMP.teleport(playerMP.server.getWorld(Main.getOverworldDimension()), teleporterPos.getX() + 0.5D, teleporterPos.getY() + 1D, teleporterPos.getZ() + 0.5D, playerMP.rotationYaw, playerMP.rotationPitch);
         } else if (playerMP.dimension.equals(Main.getOverworldDimension())) {
             ServerWorld teleportWorld = playerMP.server.getWorld(Main.getMiningDimension());
 
@@ -77,6 +77,8 @@ public class BlockTeleporter extends Block implements ITileEntityProvider, IItem
                 return true;
             }
             playerMP.teleport(teleportWorld, teleporterPos.getX() + 0.5D, teleporterPos.getY() + 1D, teleporterPos.getZ() + 0.5D, playerMP.rotationYaw, playerMP.rotationPitch);
+        } else {
+            playerMP.sendStatusMessage(new TranslationTextComponent("message.wrong_dimension"), true);
         }
 
         return true;

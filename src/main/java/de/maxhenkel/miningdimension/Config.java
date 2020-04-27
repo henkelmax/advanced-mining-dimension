@@ -5,6 +5,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 public class Config {
 
+    public static ForgeConfigSpec.ConfigValue<String> OVERWORLD_DIMENSION;
     public static ForgeConfigSpec.DoubleValue CAVE_PERCENTAGE;
     public static ForgeConfigSpec.DoubleValue CANYON_PERCENTAGE;
     public static ForgeConfigSpec.BooleanValue GENERATE_LAVA_LAKES;
@@ -24,6 +25,7 @@ public class Config {
 
     public static class ServerConfig {
         public ServerConfig(ForgeConfigSpec.Builder builder) {
+            OVERWORLD_DIMENSION = builder.comment("The dimension from where you can teleport to the mining dimension and back").define("overworld_dimension", "minecraft:overworld");
             CAVE_PERCENTAGE = builder.defineInRange("world_generation.cave_percentage", 0.3D, 0D, 1D);
             CANYON_PERCENTAGE = builder.defineInRange("world_generation.canyon_percentage", 0.02D, 0D, 1D);
             GENERATE_LAVA_LAKES = builder.define("world_generation.lava_lakes", true);

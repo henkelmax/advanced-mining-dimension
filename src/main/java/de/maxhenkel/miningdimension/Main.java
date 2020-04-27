@@ -134,6 +134,6 @@ public class Main {
     }
 
     public static DimensionType getOverworldDimension() {
-        return DimensionType.byName(DimensionType.OVERWORLD.getRegistryName());
+        return DimensionType.byName(new ResourceLocation(Config.OVERWORLD_DIMENSION.get()));
     }
 }
