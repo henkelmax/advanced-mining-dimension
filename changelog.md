@@ -1,1 +1,3 @@
-- Added config option for overworld dimension
+- Updated forge version
+- Updated MCP mappings
+- Fixed teleporter not working in worlds created before adding the mod

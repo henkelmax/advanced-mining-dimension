@@ -20,7 +20,7 @@ public class ChunkGeneratorMining extends ChunkGenerator {
     }
 
     @Override
-    public void func_225551_a_(WorldGenRegion genRegion, IChunk chunk) {
+    public void generateSurface(WorldGenRegion genRegion, IChunk chunk) {
         BlockPos.Mutable pos = new BlockPos.Mutable();
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
