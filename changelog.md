@@ -1,1 +1,1 @@
-- Added missing translation for mining dimension biome
+- Fixed teleporter not working in worlds created before adding the mod

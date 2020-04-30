@@ -1,13 +1,13 @@
 buildscript {
     repositories {
         maven { url = 'https://files.minecraftforge.net/maven' }
-        maven { url = 'https://maven.maxhenkel.de/artifactory/public' }
+        maven { url = 'https://maven.maxhenkel.de/repository/public' }
         jcenter()
         mavenCentral()
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
-        classpath group: 'de.maxhenkel.forge-update', name: 'forge-update', version: '1.0.1'
+        classpath group: 'de.maxhenkel.forge-update', name: 'forge-update', version: '1.0.2'
     }
 }
 

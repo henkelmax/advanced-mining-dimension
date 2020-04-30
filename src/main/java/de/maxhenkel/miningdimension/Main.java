@@ -113,7 +113,12 @@ public class Main {
     @SubscribeEvent
     public void registerDimension(RegistryEvent.Register<ModDimension> event) {
         event.getRegistry().register(MINING_DIMENSION);
+        addDimensionType();
+    }
+
+    public static DimensionType addDimensionType() {
         MINING_DIMENSION_TYPE = DimensionManager.registerDimension(MINING_DIMENSION.getRegistryName(), MINING_DIMENSION, null, true);
+        return MINING_DIMENSION_TYPE;
     }
 
     @SubscribeEvent
@@ -124,11 +129,10 @@ public class Main {
     public static DimensionType getMiningDimension() {
         DimensionType type = DimensionType.byName(Main.MINING_DIMENSION.getRegistryName());
         if (type == null) {
-            LOGGER.error("Could not find mining dimension");
-            LOGGER.debug("Listing available dimensions:");
-            for (DimensionType t : DimensionType.getAll()) {
-                LOGGER.debug("  - {} with id {}", t.getRegistryName(), t.getId());
-            }
+            LOGGER.warn("Could not find mining dimension");
+            LOGGER.warn("This world may be created without the mining dimension mod installed");
+            LOGGER.info("Registering mining dimension");
+            type = addDimensionType();
         }
         return type;
     }
