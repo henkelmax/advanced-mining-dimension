@@ -1,3 +1,2 @@
-- Updated forge version
-- Updated MCP mappings
-- Fixed teleporter not working in worlds created before adding the mod
+- Added german language
+- Updated the teleporter texture to match the new textures
