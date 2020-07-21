@@ -2,6 +2,7 @@ package de.maxhenkel.miningdimension.dimension;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import de.maxhenkel.miningdimension.Main;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
@@ -45,10 +46,12 @@ public class ChunkGeneratorMining extends ChunkGenerator {
 
     @Override
     public void generateSurface(WorldGenRegion genRegion, IChunk chunk) {
-        BlockPos.Mutable pos = new BlockPos.Mutable();
-        for (int x = 0; x < 16; x++) {
-            for (int z = 0; z < 16; z++) {
-                chunk.setBlockState(pos.setPos(x, height, z), Blocks.BEDROCK.getDefaultState(), false);
+        if (Main.SERVER_CONFIG.bedrockCeiling.get()) {
+            BlockPos.Mutable pos = new BlockPos.Mutable();
+            for (int x = 0; x < 16; x++) {
+                for (int z = 0; z < 16; z++) {
+                    chunk.setBlockState(pos.setPos(x, height, z), Blocks.BEDROCK.getDefaultState(), false);
+                }
             }
         }
     }
@@ -57,16 +60,18 @@ public class ChunkGeneratorMining extends ChunkGenerator {
     public void func_230352_b_(IWorld world, StructureManager structureManager, IChunk chunk) {
         BlockPos.Mutable pos = new BlockPos.Mutable();
 
-        for (int x = 0; x < 16; x++) {
-            for (int z = 0; z < 16; z++) {
-                chunk.setBlockState(pos.setPos(x, 0, z), Blocks.BEDROCK.getDefaultState(), false);
-            }
-        }
-
-        for (int y = 1; y < height; y++) {
+        for (int y = 0; y <= height; y++) {
             for (int x = 0; x < 16; x++) {
                 for (int z = 0; z < 16; z++) {
                     chunk.setBlockState(pos.setPos(x, y, z), Blocks.STONE.getDefaultState(), false);
+                }
+            }
+        }
+
+        if (Main.SERVER_CONFIG.bedrockFloor.get()) {
+            for (int x = 0; x < 16; x++) {
+                for (int z = 0; z < 16; z++) {
+                    chunk.setBlockState(pos.setPos(x, 0, z), Blocks.BEDROCK.getDefaultState(), false);
                 }
             }
         }

@@ -1,1 +1,1 @@
-- Update to 1.16.1
+- Added a config option to remove bedrock generation

@@ -18,19 +18,33 @@ public class ServerConfig extends ConfigBase {
     public final ForgeConfigSpec.BooleanValue generateStoneVariants;
     public final ForgeConfigSpec.BooleanValue generateOres;
     public final ForgeConfigSpec.BooleanValue generateLava;
+    public final ForgeConfigSpec.BooleanValue bedrockFloor;
+    public final ForgeConfigSpec.BooleanValue bedrockCeiling;
 
     public RegistryKey<World> overworldDimension;
 
     public ServerConfig(ForgeConfigSpec.Builder builder) {
         super(builder);
-        overworldDimensionSpec = builder.comment("The dimension from where you can teleport to the mining dimension and back").define("overworld_dimension", "minecraft:overworld");
+        overworldDimensionSpec = builder
+                .comment("The dimension from where you can teleport to the mining dimension and back")
+                .define("overworld_dimension", "minecraft:overworld");
         cavePercentage = builder.defineInRange("world_generation.cave_percentage", 0.3D, 0D, 1D);
         canyonPercentage = builder.defineInRange("world_generation.canyon_percentage", 0.02D, 0D, 1D);
         generateLavaLakes = builder.define("world_generation.lava_lakes", true);
         generateSpawners = builder.define("world_generation.spawners", true);
         generateStoneVariants = builder.define("world_generation.stone_variants", true);
         generateOres = builder.define("world_generation.ores", true);
-        generateLava = builder.comment("If lava should be generated in caves below level 11").define("world_generation.lava", true);
+        generateLava = builder
+                .comment("If lava should be generated in caves below level 11")
+                .define("world_generation.lava", true);
+        bedrockFloor = builder
+                .comment("If a bedrock layer should be generated at Y=0")
+                .comment("Note that setting this to false can cause players to fall into the void")
+                .define("world_generation.bedrock_floor", true);
+        bedrockCeiling = builder
+                .comment("If a bedrock layer should be generated at Y=255")
+                .comment("Note that setting this to false causes the game to spawn mobs on top of the world")
+                .define("world_generation.bedrock_ceiling", true);
     }
 
     @Override
