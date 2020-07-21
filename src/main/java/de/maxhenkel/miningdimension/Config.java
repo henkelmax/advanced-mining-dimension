@@ -13,6 +13,8 @@ public class Config {
     public static ForgeConfigSpec.BooleanValue GENERATE_STONE_VARIANTS;
     public static ForgeConfigSpec.BooleanValue GENERATE_ORES;
     public static ForgeConfigSpec.BooleanValue GENERATE_LAVA;
+    public static ForgeConfigSpec.BooleanValue BEDROCK_FLOOR;
+    public static ForgeConfigSpec.BooleanValue BEDROCK_CEILING;
 
     public static final ServerConfig SERVER;
     public static final ForgeConfigSpec SERVER_SPEC;
@@ -33,6 +35,14 @@ public class Config {
             GENERATE_STONE_VARIANTS = builder.define("world_generation.stone_variants", true);
             GENERATE_ORES = builder.define("world_generation.ores", true);
             GENERATE_LAVA = builder.comment("If lava should be generated in caves below level 11").define("world_generation.lava", true);
+            BEDROCK_FLOOR = builder
+                    .comment("If a bedrock layer should be generated at Y=0")
+                    .comment("Note that setting this to false can cause players to fall into the void")
+                    .define("world_generation.bedrock_floor", true);
+            BEDROCK_CEILING = builder
+                    .comment("If a bedrock layer should be generated at Y=255")
+                    .comment("Note that setting this to false causes the game to spawn mobs on top of the world")
+                    .define("world_generation.bedrock_ceiling", true);
         }
     }
 

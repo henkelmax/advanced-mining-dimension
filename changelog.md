@@ -1,2 +1,1 @@
-- Added german language
-- Updated the teleporter texture to match the new textures
+- Added a config option to remove bedrock generation

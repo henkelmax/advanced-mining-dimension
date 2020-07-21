@@ -1,5 +1,6 @@
 package de.maxhenkel.miningdimension.dimension;
 
+import de.maxhenkel.miningdimension.Config;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
@@ -21,10 +22,12 @@ public class ChunkGeneratorMining extends ChunkGenerator {
 
     @Override
     public void generateSurface(WorldGenRegion genRegion, IChunk chunk) {
-        BlockPos.Mutable pos = new BlockPos.Mutable();
-        for (int x = 0; x < 16; x++) {
-            for (int z = 0; z < 16; z++) {
-                chunk.setBlockState(pos.setPos(x, height, z), Blocks.BEDROCK.getDefaultState(), false);
+        if (Config.BEDROCK_CEILING.get()) {
+            BlockPos.Mutable pos = new BlockPos.Mutable();
+            for (int x = 0; x < 16; x++) {
+                for (int z = 0; z < 16; z++) {
+                    chunk.setBlockState(pos.setPos(x, height, z), Blocks.BEDROCK.getDefaultState(), false);
+                }
             }
         }
     }
@@ -38,16 +41,18 @@ public class ChunkGeneratorMining extends ChunkGenerator {
     public void makeBase(IWorld world, IChunk chunk) {
         BlockPos.Mutable pos = new BlockPos.Mutable();
 
-        for (int x = 0; x < 16; x++) {
-            for (int z = 0; z < 16; z++) {
-                chunk.setBlockState(pos.setPos(x, 0, z), Blocks.BEDROCK.getDefaultState(), false);
-            }
-        }
-
-        for (int y = 1; y < height; y++) {
+        for (int y = 0; y <= height; y++) {
             for (int x = 0; x < 16; x++) {
                 for (int z = 0; z < 16; z++) {
                     chunk.setBlockState(pos.setPos(x, y, z), Blocks.STONE.getDefaultState(), false);
+                }
+            }
+        }
+
+        if (Config.BEDROCK_FLOOR.get()) {
+            for (int x = 0; x < 16; x++) {
+                for (int z = 0; z < 16; z++) {
+                    chunk.setBlockState(pos.setPos(x, 0, z), Blocks.BEDROCK.getDefaultState(), false);
                 }
             }
         }
