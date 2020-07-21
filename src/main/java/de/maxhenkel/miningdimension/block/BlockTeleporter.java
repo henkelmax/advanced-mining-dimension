@@ -1,6 +1,6 @@
 package de.maxhenkel.miningdimension.block;
 
-import de.maxhenkel.miningdimension.IItemBlock;
+import de.maxhenkel.corelib.block.IItemBlock;
 import de.maxhenkel.miningdimension.Main;
 import de.maxhenkel.miningdimension.tileentity.TileentityTeleporter;
 import net.minecraft.block.*;
@@ -11,10 +11,7 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -50,8 +47,12 @@ public class BlockTeleporter extends Block implements ITileEntityProvider, IItem
             return false;
         }
 
-        if (playerMP.dimension.equals(Main.getMiningDimension())) {
-            ServerWorld teleportWorld = playerMP.server.getWorld(Main.getOverworldDimension());
+        if (playerMP.world.func_234923_W_().equals(Main.MINING_DIMENSION)) {
+            ServerWorld teleportWorld = playerMP.server.getWorld(Main.SERVER_CONFIG.overworldDimension);
+
+            if (teleportWorld == null) {
+                return false;
+            }
 
             Chunk chunk = (Chunk) teleportWorld.getChunk(pos);
             BlockPos teleporterPos = findPortalInChunk(chunk);
@@ -63,9 +64,13 @@ public class BlockTeleporter extends Block implements ITileEntityProvider, IItem
                 return true;
             }
 
-            playerMP.teleport(playerMP.server.getWorld(Main.getOverworldDimension()), teleporterPos.getX() + 0.5D, teleporterPos.getY() + 1D, teleporterPos.getZ() + 0.5D, playerMP.rotationYaw, playerMP.rotationPitch);
-        } else if (playerMP.dimension.equals(Main.getOverworldDimension())) {
-            ServerWorld teleportWorld = playerMP.server.getWorld(Main.getMiningDimension());
+            playerMP.teleport(teleportWorld, teleporterPos.getX() + 0.5D, teleporterPos.getY() + 1D, teleporterPos.getZ() + 0.5D, playerMP.rotationYaw, playerMP.rotationPitch);
+        } else if (playerMP.world.func_234923_W_().equals(Main.SERVER_CONFIG.overworldDimension)) {
+            ServerWorld teleportWorld = playerMP.server.getWorld(Main.MINING_DIMENSION);
+
+            if (teleportWorld == null) {
+                return false;
+            }
 
             Chunk chunk = (Chunk) teleportWorld.getChunk(pos);
             BlockPos teleporterPos = findPortalInChunk(chunk);
@@ -194,4 +199,5 @@ public class BlockTeleporter extends Block implements ITileEntityProvider, IItem
     public TileEntity createNewTileEntity(IBlockReader worldIn) {
         return new TileentityTeleporter();
     }
+
 }

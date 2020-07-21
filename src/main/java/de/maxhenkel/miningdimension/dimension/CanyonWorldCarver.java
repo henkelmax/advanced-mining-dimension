@@ -1,27 +1,27 @@
 package de.maxhenkel.miningdimension.dimension;
 
-import com.mojang.datafixers.Dynamic;
-import de.maxhenkel.miningdimension.Config;
+import com.mojang.serialization.Codec;
+import de.maxhenkel.miningdimension.Main;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.IChunk;
 import net.minecraft.world.gen.feature.ProbabilityConfig;
+import org.apache.commons.lang3.mutable.MutableBoolean;
 
 import java.util.BitSet;
 import java.util.Random;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Function;
 
 public class CanyonWorldCarver extends net.minecraft.world.gen.carver.CanyonWorldCarver {
 
-    public CanyonWorldCarver(Function<Dynamic<?>, ? extends ProbabilityConfig> function) {
-        super(function);
+    public CanyonWorldCarver(Codec<ProbabilityConfig> codec) {
+        super(codec);
     }
 
     @Override
-    protected boolean func_225556_a_(IChunk chunk, Function<BlockPos, Biome> biome, BitSet carvingMask, Random rand, BlockPos.Mutable pos, BlockPos.Mutable pos1, BlockPos.Mutable pos2, int i1, int i2, int i3, int posX, int posZ, int i6, int posY, int i8, AtomicBoolean aBoolean) {
+    protected boolean func_230358_a_(IChunk chunk, Function<BlockPos, Biome> biome, BitSet carvingMask, Random rand, BlockPos.Mutable pos, BlockPos.Mutable pos1, BlockPos.Mutable pos2, int i1, int i2, int i3, int posX, int posZ, int i6, int posY, int i8, MutableBoolean aBoolean) {
         int i = i6 | i8 << 4 | posY << 8;
         if (carvingMask.get(i)) {
             return false;
@@ -36,7 +36,7 @@ public class CanyonWorldCarver extends net.minecraft.world.gen.carver.CanyonWorl
             return false;
         }
 
-        if (posY < 11 && Config.GENERATE_LAVA.get()) {
+        if (posY < 11 && Main.SERVER_CONFIG.generateLava.get()) {
             chunk.setBlockState(pos, LAVA.getBlockState(), false);
         } else {
             chunk.setBlockState(pos, CAVE_AIR, false);
@@ -44,4 +44,5 @@ public class CanyonWorldCarver extends net.minecraft.world.gen.carver.CanyonWorl
 
         return true;
     }
+
 }

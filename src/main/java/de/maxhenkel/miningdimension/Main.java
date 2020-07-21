@@ -1,25 +1,25 @@
 package de.maxhenkel.miningdimension;
 
+import de.maxhenkel.corelib.CommonRegistry;
 import de.maxhenkel.miningdimension.block.ModBlocks;
 import de.maxhenkel.miningdimension.dimension.CanyonWorldCarver;
 import de.maxhenkel.miningdimension.dimension.CaveWorldCarver;
+import de.maxhenkel.miningdimension.dimension.ChunkGeneratorMining;
 import de.maxhenkel.miningdimension.dimension.MiningBiome;
-import de.maxhenkel.miningdimension.dimension.ModDimensionMining;
 import de.maxhenkel.miningdimension.tileentity.TileentityTeleporter;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.carver.WorldCarver;
 import net.minecraft.world.gen.feature.ProbabilityConfig;
-import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.ModDimension;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -34,36 +34,26 @@ public class Main {
 
     public static final Logger LOGGER = LogManager.getLogger(MODID);
 
-    public static ModDimension MINING_DIMENSION;
-    public static DimensionType MINING_DIMENSION_TYPE;
-    public static TileEntityType TELEPORTER_TILEENTITY;
-    public static MiningBiome MINING_BIOME;
     public static CaveWorldCarver CAVE_CARVER;
     public static CanyonWorldCarver CANYON_CARVER;
+    public static TileEntityType<TileentityTeleporter> TELEPORTER_TILEENTITY;
+    public static MiningBiome MINING_BIOME;
+    public static final RegistryKey<World> MINING_DIMENSION = RegistryKey.func_240903_a_(Registry.field_239699_ae_, new ResourceLocation(Main.MODID, "mining_dimension"));
+
+    public static ServerConfig SERVER_CONFIG;
 
     public Main() {
-
         FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(Item.class, this::registerItems);
         FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(Block.class, this::registerBlocks);
         FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(TileEntityType.class, this::registerTileEntities);
         FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(Biome.class, this::registerBiomes);
         FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(WorldCarver.class, this::registerCarver);
-        FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(ModDimension.class, this::registerDimension);
-        FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(DimensionType.class, this::registerDimensionType);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::commonSetup);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::configEvent);
 
-        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, Config.SERVER_SPEC);
+        SERVER_CONFIG = CommonRegistry.registerConfig(ModConfig.Type.SERVER, ServerConfig.class, true);
 
-        MINING_DIMENSION = new ModDimensionMining();
-        MINING_DIMENSION.setRegistryName(new ResourceLocation(Main.MODID, "mining_world"));
-    }
-
-    @SubscribeEvent
-    public void configEvent(ModConfig.ModConfigEvent event) {
-        if (event.getConfig().getType() == ModConfig.Type.SERVER) {
-            MINING_BIOME.initializeFeatures();
-        }
+        Registry.register(Registry.field_239690_aB_, new ResourceLocation(Main.MODID, "mining"), ChunkGeneratorMining.CODEC);
+        Registry.register(Registry.field_239690_aB_, new ResourceLocation(Main.MODID, "mining"), ChunkGeneratorMining.CODEC);
     }
 
     @SubscribeEvent
@@ -101,43 +91,13 @@ public class Main {
 
     @SubscribeEvent
     public void registerCarver(RegistryEvent.Register<WorldCarver<?>> event) {
-        CAVE_CARVER = new CaveWorldCarver(ProbabilityConfig::deserialize, 255);
+        CAVE_CARVER = new CaveWorldCarver(ProbabilityConfig.field_236576_b_, 255);
         CAVE_CARVER.setRegistryName(new ResourceLocation(Main.MODID, "mining_carver"));
         event.getRegistry().register(CAVE_CARVER);
 
-        CANYON_CARVER = new CanyonWorldCarver(ProbabilityConfig::deserialize);
+        CANYON_CARVER = new CanyonWorldCarver(ProbabilityConfig.field_236576_b_);
         CANYON_CARVER.setRegistryName(new ResourceLocation(Main.MODID, "canyon_carver"));
         event.getRegistry().register(CANYON_CARVER);
     }
 
-    @SubscribeEvent
-    public void registerDimension(RegistryEvent.Register<ModDimension> event) {
-        event.getRegistry().register(MINING_DIMENSION);
-        addDimensionType();
-    }
-
-    public static DimensionType addDimensionType() {
-        MINING_DIMENSION_TYPE = DimensionManager.registerDimension(MINING_DIMENSION.getRegistryName(), MINING_DIMENSION, null, true);
-        return MINING_DIMENSION_TYPE;
-    }
-
-    @SubscribeEvent
-    public void registerDimensionType(RegistryEvent.Register<DimensionType> event) {
-        event.getRegistry().register(MINING_DIMENSION_TYPE);
-    }
-
-    public static DimensionType getMiningDimension() {
-        DimensionType type = DimensionType.byName(Main.MINING_DIMENSION.getRegistryName());
-        if (type == null) {
-            LOGGER.warn("Could not find mining dimension");
-            LOGGER.warn("This world may be created without the mining dimension mod installed");
-            LOGGER.info("Registering mining dimension");
-            type = addDimensionType();
-        }
-        return type;
-    }
-
-    public static DimensionType getOverworldDimension() {
-        return DimensionType.byName(new ResourceLocation(Config.OVERWORLD_DIMENSION.get()));
-    }
 }

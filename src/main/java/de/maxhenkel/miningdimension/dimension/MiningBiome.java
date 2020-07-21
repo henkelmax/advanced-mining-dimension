@@ -1,14 +1,19 @@
 package de.maxhenkel.miningdimension.dimension;
 
-import de.maxhenkel.miningdimension.Config;
+import com.google.common.collect.ImmutableList;
 import de.maxhenkel.miningdimension.Main;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeAmbience;
+import net.minecraft.world.biome.MoodSoundAmbience;
 import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.feature.*;
-import net.minecraft.world.gen.placement.*;
+import net.minecraft.world.gen.placement.ChanceConfig;
+import net.minecraft.world.gen.placement.CountRangeConfig;
+import net.minecraft.world.gen.placement.DepthAverageConfig;
+import net.minecraft.world.gen.placement.Placement;
 import net.minecraft.world.gen.surfacebuilders.SurfaceBuilder;
 
 public class MiningBiome extends Biome {
@@ -22,9 +27,9 @@ public class MiningBiome extends Biome {
                 .scale(0.05F)
                 .temperature(0.8F)
                 .downfall(0.4F)
-                .waterColor(4159204)
-                .waterFogColor(329011)
+                .func_235097_a_((new BiomeAmbience.Builder()).func_235246_b_(4159204).func_235248_c_(329011).func_235239_a_(12638463).func_235243_a_(MoodSoundAmbience.field_235027_b_).func_235238_a_())
                 .parent(null)
+                .func_235098_a_(ImmutableList.of(new Biome.Attributes(0.0F, 0.0F, 0.0F, 0.0F, 1.0F)))
         );
 
         addSpawn(EntityClassification.MONSTER, new SpawnListEntry(EntityType.SPIDER, 100, 4, 4));
@@ -53,9 +58,6 @@ public class MiningBiome extends Biome {
     public static final ConfiguredFeature LAPIS_ORE = Feature.ORE.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, Blocks.LAPIS_ORE.getDefaultState(), 7)).withPlacement(Placement.COUNT_DEPTH_AVERAGE.configure(new DepthAverageConfig(1, 16, 16)));
 
     public void initializeFeatures() {
-        flowers.clear();
-        structures.clear();
-
         carvers.values().forEach(carvers -> {
             carvers.removeIf(configuredCarver -> {
                 if (configuredCarver.carver instanceof CaveWorldCarver) {
@@ -85,19 +87,19 @@ public class MiningBiome extends Biome {
             });
         });
 
-        addCarver(GenerationStage.Carving.AIR, Biome.createCarver(Main.CAVE_CARVER, new ProbabilityConfig(Config.CAVE_PERCENTAGE.get().floatValue())));
+        addCarver(GenerationStage.Carving.AIR, Biome.createCarver(Main.CAVE_CARVER, new ProbabilityConfig(Main.SERVER_CONFIG.cavePercentage.get().floatValue())));
 
-        addCarver(GenerationStage.Carving.AIR, Biome.createCarver(Main.CANYON_CARVER, new ProbabilityConfig(Config.CANYON_PERCENTAGE.get().floatValue())));
+        addCarver(GenerationStage.Carving.AIR, Biome.createCarver(Main.CANYON_CARVER, new ProbabilityConfig(Main.SERVER_CONFIG.canyonPercentage.get().floatValue())));
 
-        if (Config.GENERATE_LAVA_LAKES.get()) {
+        if (Main.SERVER_CONFIG.generateLavaLakes.get()) {
             addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, LAKE);
         }
 
-        if (Config.GENERATE_SPAWNERS.get()) {
+        if (Main.SERVER_CONFIG.generateSpawners.get()) {
             addFeature(GenerationStage.Decoration.UNDERGROUND_STRUCTURES, MONSTER_ROOM);
         }
 
-        if (Config.GENERATE_STONE_VARIANTS.get()) {
+        if (Main.SERVER_CONFIG.generateStoneVariants.get()) {
             addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, DIRT);
             addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, GRAVEL);
             addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, GRANITE);
@@ -105,7 +107,7 @@ public class MiningBiome extends Biome {
             addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, DIORITE);
         }
 
-        if (Config.GENERATE_ORES.get()) {
+        if (Main.SERVER_CONFIG.generateOres.get()) {
             addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, COAL_ORE);
             addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, IRON_ORE);
             addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, GOLD_ORE);
