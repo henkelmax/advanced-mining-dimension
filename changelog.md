@@ -1,1 +1,1 @@
-- Added a config option to remove bedrock generation
+- Added config options for ores

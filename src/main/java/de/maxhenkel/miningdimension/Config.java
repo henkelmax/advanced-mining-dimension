@@ -16,6 +16,21 @@ public class Config {
     public static ForgeConfigSpec.BooleanValue BEDROCK_FLOOR;
     public static ForgeConfigSpec.BooleanValue BEDROCK_CEILING;
 
+    public static ForgeConfigSpec.IntValue COAL_MAX_HEIGHT;
+    public static ForgeConfigSpec.IntValue IRON_MAX_HEIGHT;
+    public static ForgeConfigSpec.IntValue GOLD_MAX_HEIGHT;
+    public static ForgeConfigSpec.IntValue REDSTONE_MAX_HEIGHT;
+    public static ForgeConfigSpec.IntValue DIAMOND_MAX_HEIGHT;
+    public static ForgeConfigSpec.IntValue LAPIS_MAX_HEIGHT;
+
+    public static ForgeConfigSpec.IntValue COAL_COUNT;
+    public static ForgeConfigSpec.IntValue IRON_COUNT;
+    public static ForgeConfigSpec.IntValue GOLD_COUNT;
+    public static ForgeConfigSpec.IntValue REDSTONE_COUNT;
+    public static ForgeConfigSpec.IntValue DIAMOND_COUNT;
+    public static ForgeConfigSpec.IntValue LAPIS_COUNT;
+
+
     public static final ServerConfig SERVER;
     public static final ForgeConfigSpec SERVER_SPEC;
 
@@ -43,6 +58,21 @@ public class Config {
                     .comment("If a bedrock layer should be generated at Y=255")
                     .comment("Note that setting this to false causes the game to spawn mobs on top of the world")
                     .define("world_generation.bedrock_ceiling", true);
+
+            COAL_MAX_HEIGHT = builder.worldRestart().defineInRange("world_generation.coal_ore.max_height", 128, 1, 256);
+            IRON_MAX_HEIGHT = builder.worldRestart().defineInRange("world_generation.iron_ore.max_height", 64, 1, 256);
+            GOLD_MAX_HEIGHT = builder.worldRestart().defineInRange("world_generation.gold_ore.max_height", 32, 1, 256);
+            REDSTONE_MAX_HEIGHT = builder.worldRestart().defineInRange("world_generation.redstone_ore.max_height", 16, 1, 256);
+            DIAMOND_MAX_HEIGHT = builder.worldRestart().defineInRange("world_generation.diamond_ore.max_height", 16, 1, 256);
+            LAPIS_MAX_HEIGHT = builder.worldRestart().defineInRange("world_generation.lapis_lazuli_ore.baseline", 16, 1, 256);
+
+            COAL_COUNT = builder.worldRestart().defineInRange("world_generation.coal_ore.count", 20, 1, 512);
+            IRON_COUNT = builder.worldRestart().defineInRange("world_generation.iron_ore.count", 20, 1, 512);
+            GOLD_COUNT = builder.worldRestart().defineInRange("world_generation.gold_ore.count", 2, 1, 512);
+            REDSTONE_COUNT = builder.worldRestart().defineInRange("world_generation.redstone_ore.count", 8, 1, 512);
+            DIAMOND_COUNT = builder.worldRestart().defineInRange("world_generation.diamond_ore.count", 1, 1, 512);
+            LAPIS_COUNT = builder.worldRestart().defineInRange("world_generation.lapis_lazuli_ore.count", 1, 1, 512);
+
         }
     }
 
