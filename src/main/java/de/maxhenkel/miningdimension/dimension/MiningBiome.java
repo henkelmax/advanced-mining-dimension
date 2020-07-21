@@ -2,6 +2,7 @@ package de.maxhenkel.miningdimension.dimension;
 
 import com.google.common.collect.ImmutableList;
 import de.maxhenkel.miningdimension.Main;
+import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
@@ -50,14 +51,9 @@ public class MiningBiome extends Biome {
     public static final ConfiguredFeature DIORITE = Feature.ORE.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, Blocks.DIORITE.getDefaultState(), 33)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(10, 0, 0, 80)));
     public static final ConfiguredFeature ANDESITE = Feature.ORE.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, Blocks.ANDESITE.getDefaultState(), 33)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(10, 0, 0, 80)));
 
-    public static final ConfiguredFeature COAL_ORE = Feature.ORE.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, Blocks.COAL_ORE.getDefaultState(), 17)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(20, 0, 0, 128)));
-    public static final ConfiguredFeature IRON_ORE = Feature.ORE.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, Blocks.IRON_ORE.getDefaultState(), 9)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(20, 0, 0, 64)));
-    public static final ConfiguredFeature GOLD_ORE = Feature.ORE.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, Blocks.GOLD_ORE.getDefaultState(), 9)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(2, 0, 0, 32)));
-    public static final ConfiguredFeature REDSTONE_ORE = Feature.ORE.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, Blocks.REDSTONE_ORE.getDefaultState(), 8)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(8, 0, 0, 16)));
-    public static final ConfiguredFeature DIAMOND_ORE = Feature.ORE.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, Blocks.DIAMOND_ORE.getDefaultState(), 8)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(1, 0, 0, 16)));
-    public static final ConfiguredFeature LAPIS_ORE = Feature.ORE.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, Blocks.LAPIS_ORE.getDefaultState(), 7)).withPlacement(Placement.COUNT_DEPTH_AVERAGE.configure(new DepthAverageConfig(1, 16, 16)));
-
     public void initializeFeatures() {
+        Main.LOGGER.info("Reloading mining biome features");
+
         carvers.values().forEach(carvers -> {
             carvers.removeIf(configuredCarver -> {
                 if (configuredCarver.carver instanceof CaveWorldCarver) {
@@ -78,12 +74,12 @@ public class MiningBiome extends Biome {
                         feature == GRANITE ||
                         feature == DIORITE ||
                         feature == ANDESITE ||
-                        feature == COAL_ORE ||
-                        feature == IRON_ORE ||
-                        feature == GOLD_ORE ||
-                        feature == REDSTONE_ORE ||
-                        feature == DIAMOND_ORE ||
-                        feature == LAPIS_ORE;
+                        isFeature(feature, Blocks.COAL_ORE) ||
+                        isFeature(feature, Blocks.IRON_ORE) ||
+                        isFeature(feature, Blocks.GOLD_ORE) ||
+                        isFeature(feature, Blocks.REDSTONE_ORE) ||
+                        isFeature(feature, Blocks.DIAMOND_ORE) ||
+                        isFeature(feature, Blocks.LAPIS_ORE);
             });
         });
 
@@ -108,13 +104,24 @@ public class MiningBiome extends Biome {
         }
 
         if (Main.SERVER_CONFIG.generateOres.get()) {
-            addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, COAL_ORE);
-            addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, IRON_ORE);
-            addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, GOLD_ORE);
-            addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, REDSTONE_ORE);
-            addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, DIAMOND_ORE);
-            addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, LAPIS_ORE);
+            addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, Blocks.COAL_ORE.getDefaultState(), 17)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(Main.SERVER_CONFIG.coalCount.get(), 0, 0, Main.SERVER_CONFIG.coalMaxHeight.get()))));
+            addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, Blocks.IRON_ORE.getDefaultState(), 9)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(Main.SERVER_CONFIG.ironCount.get(), 0, 0, Main.SERVER_CONFIG.ironMaxHeight.get()))));
+            addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, Blocks.GOLD_ORE.getDefaultState(), 9)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(Main.SERVER_CONFIG.goldCount.get(), 0, 0, Main.SERVER_CONFIG.goldMaxHeight.get()))));
+            addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, Blocks.REDSTONE_ORE.getDefaultState(), 8)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(Main.SERVER_CONFIG.redstoneCount.get(), 0, 0, Main.SERVER_CONFIG.redstoneMaxHeight.get()))));
+            addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, Blocks.DIAMOND_ORE.getDefaultState(), 8)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(Main.SERVER_CONFIG.diamondCount.get(), 0, 0, Main.SERVER_CONFIG.diamondMaxHeight.get()))));
+            addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, Blocks.LAPIS_ORE.getDefaultState(), 7)).withPlacement(Placement.COUNT_DEPTH_AVERAGE.configure(new DepthAverageConfig(Main.SERVER_CONFIG.lapisCount.get(), Main.SERVER_CONFIG.lapisBaseline.get(), 16))));
         }
+    }
+
+    private boolean isFeature(ConfiguredFeature feature, Block block) {
+        if (feature.config instanceof DecoratedFeatureConfig) {
+            DecoratedFeatureConfig config = (DecoratedFeatureConfig) feature.config;
+            if (config.feature.config instanceof OreFeatureConfig) {
+                OreFeatureConfig c = (OreFeatureConfig) config.feature.config;
+                return block == c.state.getBlock();
+            }
+        }
+        return false;
     }
 
 }

@@ -21,6 +21,20 @@ public class ServerConfig extends ConfigBase {
     public final ForgeConfigSpec.BooleanValue bedrockFloor;
     public final ForgeConfigSpec.BooleanValue bedrockCeiling;
 
+    public final ForgeConfigSpec.IntValue coalMaxHeight;
+    public final ForgeConfigSpec.IntValue ironMaxHeight;
+    public final ForgeConfigSpec.IntValue goldMaxHeight;
+    public final ForgeConfigSpec.IntValue redstoneMaxHeight;
+    public final ForgeConfigSpec.IntValue diamondMaxHeight;
+    public final ForgeConfigSpec.IntValue lapisBaseline;
+
+    public final ForgeConfigSpec.IntValue coalCount;
+    public final ForgeConfigSpec.IntValue ironCount;
+    public final ForgeConfigSpec.IntValue goldCount;
+    public final ForgeConfigSpec.IntValue redstoneCount;
+    public final ForgeConfigSpec.IntValue diamondCount;
+    public final ForgeConfigSpec.IntValue lapisCount;
+
     public RegistryKey<World> overworldDimension;
 
     public ServerConfig(ForgeConfigSpec.Builder builder) {
@@ -45,6 +59,20 @@ public class ServerConfig extends ConfigBase {
                 .comment("If a bedrock layer should be generated at Y=255")
                 .comment("Note that setting this to false causes the game to spawn mobs on top of the world")
                 .define("world_generation.bedrock_ceiling", true);
+
+        coalMaxHeight = builder.defineInRange("world_generation.coal_ore.max_height", 128, 1, 256);
+        ironMaxHeight = builder.defineInRange("world_generation.iron_ore.max_height", 64, 1, 256);
+        goldMaxHeight = builder.defineInRange("world_generation.gold_ore.max_height", 32, 1, 256);
+        redstoneMaxHeight = builder.defineInRange("world_generation.redstone_ore.max_height", 16, 1, 256);
+        diamondMaxHeight = builder.defineInRange("world_generation.diamond_ore.max_height", 16, 1, 256);
+        lapisBaseline = builder.defineInRange("world_generation.lapis_lazuli_ore.baseline", 16, 1, 256);
+
+        coalCount = builder.defineInRange("world_generation.coal_ore.count", 20, 1, 512);
+        ironCount = builder.defineInRange("world_generation.iron_ore.count", 20, 1, 512);
+        goldCount = builder.defineInRange("world_generation.gold_ore.count", 2, 1, 512);
+        redstoneCount = builder.defineInRange("world_generation.redstone_ore.count", 8, 1, 512);
+        diamondCount = builder.defineInRange("world_generation.diamond_ore.count", 1, 1, 512);
+        lapisCount = builder.defineInRange("world_generation.lapis_lazuli_ore.count", 1, 1, 512);
     }
 
     @Override
