@@ -2,7 +2,7 @@ package de.maxhenkel.miningdimension.dimension;
 
 import com.google.common.collect.ImmutableList;
 import de.maxhenkel.miningdimension.Main;
-import net.minecraft.block.Block;
+import de.maxhenkel.miningdimension.config.Ore;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
@@ -13,7 +13,6 @@ import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.feature.*;
 import net.minecraft.world.gen.placement.ChanceConfig;
 import net.minecraft.world.gen.placement.CountRangeConfig;
-import net.minecraft.world.gen.placement.DepthAverageConfig;
 import net.minecraft.world.gen.placement.Placement;
 import net.minecraft.world.gen.surfacebuilders.SurfaceBuilder;
 
@@ -42,14 +41,18 @@ public class MiningBiome extends Biome {
         addSpawn(EntityClassification.MONSTER, new SpawnListEntry(EntityType.WITCH, 5, 1, 1));
     }
 
-    public static final ConfiguredFeature LAKE = Feature.LAKE.withConfiguration(new BlockStateFeatureConfig(Blocks.LAVA.getDefaultState())).withPlacement(Placement.LAVA_LAKE.configure(new ChanceConfig(80)));
-    public static final ConfiguredFeature MONSTER_ROOM = Feature.MONSTER_ROOM.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.DUNGEONS.configure(new ChanceConfig(8)));
+    public void initializeOreFeatures() {
+        Main.LOGGER.info("Reloading mining biome ore features");
 
-    public static final ConfiguredFeature DIRT = Feature.ORE.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, Blocks.DIRT.getDefaultState(), 33)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(10, 0, 0, 256)));
-    public static final ConfiguredFeature GRAVEL = Feature.ORE.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, Blocks.GRAVEL.getDefaultState(), 33)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(8, 0, 0, 256)));
-    public static final ConfiguredFeature GRANITE = Feature.ORE.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, Blocks.GRANITE.getDefaultState(), 33)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(10, 0, 0, 80)));
-    public static final ConfiguredFeature DIORITE = Feature.ORE.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, Blocks.DIORITE.getDefaultState(), 33)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(10, 0, 0, 80)));
-    public static final ConfiguredFeature ANDESITE = Feature.ORE.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, Blocks.ANDESITE.getDefaultState(), 33)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(10, 0, 0, 80)));
+        features.values().forEach(features -> {
+            features.removeIf(this::isOreFeature);
+        });
+
+        Main.ORE_CONFIG.getOres().stream().filter(ore -> ore.getOreBlock() != null).filter(Ore::isEnabled).forEach(ore -> {
+            addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, ore.getOreBlock(), ore.getSize())).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(ore.getCount(), 0, 0, ore.getMaxHeight()))));
+        });
+
+    }
 
     public void initializeFeatures() {
         Main.LOGGER.info("Reloading mining biome features");
@@ -66,21 +69,7 @@ public class MiningBiome extends Biome {
         });
 
         features.values().forEach(features -> {
-            features.removeIf(feature -> {
-                return feature == LAKE ||
-                        feature == MONSTER_ROOM ||
-                        feature == DIRT ||
-                        feature == GRAVEL ||
-                        feature == GRANITE ||
-                        feature == DIORITE ||
-                        feature == ANDESITE ||
-                        isFeature(feature, Blocks.COAL_ORE) ||
-                        isFeature(feature, Blocks.IRON_ORE) ||
-                        isFeature(feature, Blocks.GOLD_ORE) ||
-                        isFeature(feature, Blocks.REDSTONE_ORE) ||
-                        isFeature(feature, Blocks.DIAMOND_ORE) ||
-                        isFeature(feature, Blocks.LAPIS_ORE);
-            });
+            features.removeIf(feature -> feature.feature instanceof LakesFeature || feature.feature instanceof DungeonsFeature);
         });
 
         addCarver(GenerationStage.Carving.AIR, Biome.createCarver(Main.CAVE_CARVER, new ProbabilityConfig(Main.SERVER_CONFIG.cavePercentage.get().floatValue())));
@@ -88,37 +77,19 @@ public class MiningBiome extends Biome {
         addCarver(GenerationStage.Carving.AIR, Biome.createCarver(Main.CANYON_CARVER, new ProbabilityConfig(Main.SERVER_CONFIG.canyonPercentage.get().floatValue())));
 
         if (Main.SERVER_CONFIG.generateLavaLakes.get()) {
-            addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, LAKE);
+            addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, Feature.LAKE.withConfiguration(new BlockStateFeatureConfig(Blocks.LAVA.getDefaultState())).withPlacement(Placement.LAVA_LAKE.configure(new ChanceConfig(Main.SERVER_CONFIG.lavaLakeChance.get()))));
         }
 
         if (Main.SERVER_CONFIG.generateSpawners.get()) {
-            addFeature(GenerationStage.Decoration.UNDERGROUND_STRUCTURES, MONSTER_ROOM);
-        }
-
-        if (Main.SERVER_CONFIG.generateStoneVariants.get()) {
-            addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, DIRT);
-            addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, GRAVEL);
-            addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, GRANITE);
-            addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, ANDESITE);
-            addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, DIORITE);
-        }
-
-        if (Main.SERVER_CONFIG.generateOres.get()) {
-            addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, Blocks.COAL_ORE.getDefaultState(), 17)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(Main.SERVER_CONFIG.coalCount.get(), 0, 0, Main.SERVER_CONFIG.coalMaxHeight.get()))));
-            addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, Blocks.IRON_ORE.getDefaultState(), 9)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(Main.SERVER_CONFIG.ironCount.get(), 0, 0, Main.SERVER_CONFIG.ironMaxHeight.get()))));
-            addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, Blocks.GOLD_ORE.getDefaultState(), 9)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(Main.SERVER_CONFIG.goldCount.get(), 0, 0, Main.SERVER_CONFIG.goldMaxHeight.get()))));
-            addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, Blocks.REDSTONE_ORE.getDefaultState(), 8)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(Main.SERVER_CONFIG.redstoneCount.get(), 0, 0, Main.SERVER_CONFIG.redstoneMaxHeight.get()))));
-            addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, Blocks.DIAMOND_ORE.getDefaultState(), 8)).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(Main.SERVER_CONFIG.diamondCount.get(), 0, 0, Main.SERVER_CONFIG.diamondMaxHeight.get()))));
-            addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, Blocks.LAPIS_ORE.getDefaultState(), 7)).withPlacement(Placement.COUNT_DEPTH_AVERAGE.configure(new DepthAverageConfig(Main.SERVER_CONFIG.lapisCount.get(), Main.SERVER_CONFIG.lapisBaseline.get(), 16))));
+            addFeature(GenerationStage.Decoration.UNDERGROUND_STRUCTURES, Feature.MONSTER_ROOM.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.DUNGEONS.configure(new ChanceConfig(Main.SERVER_CONFIG.spawnerChance.get()))));
         }
     }
 
-    private boolean isFeature(ConfiguredFeature feature, Block block) {
+    private boolean isOreFeature(ConfiguredFeature<?, ?> feature) {
         if (feature.config instanceof DecoratedFeatureConfig) {
             DecoratedFeatureConfig config = (DecoratedFeatureConfig) feature.config;
             if (config.feature.config instanceof OreFeatureConfig) {
-                OreFeatureConfig c = (OreFeatureConfig) config.feature.config;
-                return block == c.state.getBlock();
+                return true;
             }
         }
         return false;

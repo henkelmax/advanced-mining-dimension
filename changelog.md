@@ -1,1 +1,1 @@
-- Added config options for ores
+- Reworked configs

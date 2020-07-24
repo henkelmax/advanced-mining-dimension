@@ -1,7 +1,10 @@
 package de.maxhenkel.miningdimension;
 
 import de.maxhenkel.corelib.CommonRegistry;
+import de.maxhenkel.corelib.config.DynamicConfig;
 import de.maxhenkel.miningdimension.block.ModBlocks;
+import de.maxhenkel.miningdimension.config.OreConfig;
+import de.maxhenkel.miningdimension.config.ServerConfig;
 import de.maxhenkel.miningdimension.dimension.CanyonWorldCarver;
 import de.maxhenkel.miningdimension.dimension.CaveWorldCarver;
 import de.maxhenkel.miningdimension.dimension.ChunkGeneratorMining;
@@ -41,6 +44,7 @@ public class Main {
     public static final RegistryKey<World> MINING_DIMENSION = RegistryKey.func_240903_a_(Registry.field_239699_ae_, new ResourceLocation(Main.MODID, "mining_dimension"));
 
     public static ServerConfig SERVER_CONFIG;
+    public static OreConfig ORE_CONFIG;
 
     public Main() {
         FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(Item.class, this::registerItems);
@@ -51,6 +55,7 @@ public class Main {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::commonSetup);
 
         SERVER_CONFIG = CommonRegistry.registerConfig(ModConfig.Type.SERVER, ServerConfig.class, true);
+        ORE_CONFIG = CommonRegistry.registerDynamicConfig(DynamicConfig.DynamicConfigType.SERVER, MODID, "ores", OreConfig.class);
 
         Registry.register(Registry.field_239690_aB_, new ResourceLocation(Main.MODID, "mining"), ChunkGeneratorMining.CODEC);
         Registry.register(Registry.field_239690_aB_, new ResourceLocation(Main.MODID, "mining"), ChunkGeneratorMining.CODEC);
