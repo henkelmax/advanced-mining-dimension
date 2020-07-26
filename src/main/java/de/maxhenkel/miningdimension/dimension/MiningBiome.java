@@ -2,10 +2,10 @@ package de.maxhenkel.miningdimension.dimension;
 
 import com.google.common.collect.ImmutableList;
 import de.maxhenkel.miningdimension.Main;
+import de.maxhenkel.miningdimension.config.Mob;
 import de.maxhenkel.miningdimension.config.Ore;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityClassification;
-import net.minecraft.entity.EntityType;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeAmbience;
 import net.minecraft.world.biome.MoodSoundAmbience;
@@ -15,6 +15,8 @@ import net.minecraft.world.gen.placement.ChanceConfig;
 import net.minecraft.world.gen.placement.CountRangeConfig;
 import net.minecraft.world.gen.placement.Placement;
 import net.minecraft.world.gen.surfacebuilders.SurfaceBuilder;
+
+import java.util.Arrays;
 
 public class MiningBiome extends Biome {
 
@@ -31,14 +33,15 @@ public class MiningBiome extends Biome {
                 .parent(null)
                 .func_235098_a_(ImmutableList.of(new Biome.Attributes(0.0F, 0.0F, 0.0F, 0.0F, 1.0F)))
         );
+    }
 
-        addSpawn(EntityClassification.MONSTER, new SpawnListEntry(EntityType.SPIDER, 100, 4, 4));
-        addSpawn(EntityClassification.MONSTER, new SpawnListEntry(EntityType.ZOMBIE, 95, 4, 4));
-        addSpawn(EntityClassification.MONSTER, new SpawnListEntry(EntityType.ZOMBIE_VILLAGER, 5, 1, 1));
-        addSpawn(EntityClassification.MONSTER, new SpawnListEntry(EntityType.SKELETON, 100, 4, 4));
-        addSpawn(EntityClassification.MONSTER, new SpawnListEntry(EntityType.CREEPER, 100, 4, 4));
-        addSpawn(EntityClassification.MONSTER, new SpawnListEntry(EntityType.ENDERMAN, 10, 1, 4));
-        addSpawn(EntityClassification.MONSTER, new SpawnListEntry(EntityType.WITCH, 5, 1, 1));
+    public void initializeMobFeatures() {
+        Main.LOGGER.info("Reloading mining biome mobs");
+        Arrays.stream(EntityClassification.values()).forEach(classification -> getSpawns(classification).clear());
+
+        Main.MOB_CONFIG.getMobs().stream().filter(mob -> mob.getEntityType() != null).filter(Mob::isEnabled).forEach(mob -> {
+            addSpawn(mob.getEntityType().getClassification(), new SpawnListEntry(mob.getEntityType(), mob.getWeight(), mob.getMinGroupCount(), mob.getMaxGroupCount()));
+        });
     }
 
     public void initializeOreFeatures() {

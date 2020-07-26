@@ -3,6 +3,7 @@ package de.maxhenkel.miningdimension;
 import de.maxhenkel.corelib.CommonRegistry;
 import de.maxhenkel.corelib.config.DynamicConfig;
 import de.maxhenkel.miningdimension.block.ModBlocks;
+import de.maxhenkel.miningdimension.config.MobConfig;
 import de.maxhenkel.miningdimension.config.OreConfig;
 import de.maxhenkel.miningdimension.config.ServerConfig;
 import de.maxhenkel.miningdimension.dimension.CanyonWorldCarver;
@@ -45,6 +46,7 @@ public class Main {
 
     public static ServerConfig SERVER_CONFIG;
     public static OreConfig ORE_CONFIG;
+    public static MobConfig MOB_CONFIG;
 
     public Main() {
         FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(Item.class, this::registerItems);
@@ -56,6 +58,7 @@ public class Main {
 
         SERVER_CONFIG = CommonRegistry.registerConfig(ModConfig.Type.SERVER, ServerConfig.class, true);
         ORE_CONFIG = CommonRegistry.registerDynamicConfig(DynamicConfig.DynamicConfigType.SERVER, MODID, "ores", OreConfig.class);
+        MOB_CONFIG = CommonRegistry.registerDynamicConfig(DynamicConfig.DynamicConfigType.SERVER, MODID, "mobs", MobConfig.class);
 
         Registry.register(Registry.field_239690_aB_, new ResourceLocation(Main.MODID, "mining"), ChunkGeneratorMining.CODEC);
         Registry.register(Registry.field_239690_aB_, new ResourceLocation(Main.MODID, "mining"), ChunkGeneratorMining.CODEC);
