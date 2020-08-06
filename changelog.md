@@ -1,1 +1,1 @@
-- Added a config for mobs that can spawn in the mining dimension
+- Bugfixes

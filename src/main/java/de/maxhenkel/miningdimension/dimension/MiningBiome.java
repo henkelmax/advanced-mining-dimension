@@ -31,7 +31,7 @@ public class MiningBiome extends Biome {
                 .downfall(0.4F)
                 .func_235097_a_((new BiomeAmbience.Builder()).func_235246_b_(4159204).func_235248_c_(329011).func_235239_a_(12638463).func_235243_a_(MoodSoundAmbience.field_235027_b_).func_235238_a_())
                 .parent(null)
-                .func_235098_a_(ImmutableList.of(new Biome.Attributes(0.0F, 0.0F, 0.0F, 0.0F, 1.0F)))
+                .func_235098_a_(ImmutableList.of(new Biome.Attributes(0F, 0F, 0F, 0F, 1F)))
         );
     }
 
@@ -52,7 +52,7 @@ public class MiningBiome extends Biome {
         });
 
         Main.ORE_CONFIG.getOres().stream().filter(ore -> ore.getOreBlock() != null).filter(Ore::isEnabled).forEach(ore -> {
-            addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, ore.getOreBlock(), ore.getSize())).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(ore.getCount(), 0, 0, ore.getMaxHeight()))));
+            addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfigWrapper(OreFeatureConfig.FillerBlockType.NATURAL_STONE, ore.getOreBlock(), ore.getSize())).withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(ore.getCount(), 0, 0, ore.getMaxHeight()))));
         });
 
     }
@@ -91,7 +91,7 @@ public class MiningBiome extends Biome {
     private boolean isOreFeature(ConfiguredFeature<?, ?> feature) {
         if (feature.config instanceof DecoratedFeatureConfig) {
             DecoratedFeatureConfig config = (DecoratedFeatureConfig) feature.config;
-            if (config.feature.config instanceof OreFeatureConfig) {
+            if (config.feature.config instanceof OreFeatureConfigWrapper) {
                 return true;
             }
         }

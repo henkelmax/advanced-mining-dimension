@@ -17,9 +17,6 @@ import net.minecraft.world.gen.WorldGenRegion;
 import net.minecraft.world.gen.feature.structure.StructureManager;
 import net.minecraft.world.gen.settings.DimensionStructuresSettings;
 
-import java.util.Collections;
-import java.util.Optional;
-
 public class ChunkGeneratorMining extends ChunkGenerator {
 
     public static final Codec<ChunkGeneratorMining> CODEC = RecordCodecBuilder.create((instance) ->
@@ -30,7 +27,7 @@ public class ChunkGeneratorMining extends ChunkGenerator {
     private int height;
 
     public ChunkGeneratorMining(BiomeProvider biomeProvider) {
-        super(biomeProvider, new DimensionStructuresSettings(Optional.empty(), Collections.emptyMap()));
+        super(biomeProvider, new DimensionStructuresSettings(true));
         height = 255;
     }
 
