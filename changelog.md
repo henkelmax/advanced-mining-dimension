@@ -1,1 +1,1 @@
-- Bugfixes
+- Added spanish translation
