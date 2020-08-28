@@ -1,0 +1,1 @@
+MixinConnector: de.maxhenkel.miningdimension.mixin.MixinConnector

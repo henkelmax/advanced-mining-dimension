@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "package": "de.maxhenkel.miningdimension.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "refmap": "mining_dimension.refmap.json",
+  "minVersion": "0.8",
+  "mixins": [
+    "MinecraftMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "name": "mining_dimension:mining",
+  "ultrawarm": false,
+  "natural": false,
+  "coordinate_scale": 1,
+  "has_skylight": false,
+  "has_ceiling": true,
+  "ambient_light": 0.0,
+  "fixed_time": 18000,
+  "piglin_safe": false,
+  "bed_works": false,
+  "respawn_anchor_works": false,
+  "has_raids": false,
+  "logical_height": 256,
+  "infiniburn": "minecraft:infiniburn_overworld",
+  "effects": "minecraft:the_nether"
+}

@@ -108,7 +108,7 @@ public class BlockTeleporter extends Block implements ITileEntityProvider, IItem
                 for (int z = 0; z < 16; z++) {
                     pos.setPos(x, y, z);
                     if (chunk.getBlockState(pos).isAir() && chunk.getBlockState(pos.up(1)).isAir() && chunk.getBlockState(pos.up(2)).isAir()) {
-                        BlockPos absolutePos = chunk.getPos().getBlock(pos.getX(), pos.getY(), pos.getZ());
+                        BlockPos absolutePos = chunk.getPos().asBlockPos().add(pos.getX(), pos.getY(), pos.getZ());
                         world.setBlockState(absolutePos, ModBlocks.TELEPORTER.getDefaultState());
                         return absolutePos;
                     }
@@ -121,7 +121,7 @@ public class BlockTeleporter extends Block implements ITileEntityProvider, IItem
                 for (int z = 0; z < 16; z++) {
                     pos.setPos(x, y, z);
                     if (isAirOrStone(chunk, pos) && isAirOrStone(chunk, pos.up(1)) && isAirOrStone(chunk, pos.up(2))) {
-                        BlockPos absolutePos = chunk.getPos().getBlock(pos.getX(), pos.getY(), pos.getZ());
+                        BlockPos absolutePos = chunk.getPos().asBlockPos().add(pos.getX(), pos.getY(), pos.getZ());
                         if (isReplaceable(world, absolutePos.up(3)) &&
                                 isReplaceable(world, absolutePos.up(1).offset(Direction.NORTH)) &&
                                 isReplaceable(world, absolutePos.up(1).offset(Direction.NORTH)) &&
@@ -179,7 +179,7 @@ public class BlockTeleporter extends Block implements ITileEntityProvider, IItem
                 for (int y = 63; y < 255; y++) {
                     pos.setPos(x, y, z);
                     if (chunk.getBlockState(pos).isAir() && chunk.getBlockState(pos.up(1)).isAir()) {
-                        BlockPos absolutePos = chunk.getPos().getBlock(pos.getX(), pos.getY(), pos.getZ());
+                        BlockPos absolutePos = chunk.getPos().asBlockPos().add(pos.getX(), pos.getY(), pos.getZ());
                         world.setBlockState(absolutePos, ModBlocks.TELEPORTER.getDefaultState());
                         return absolutePos;
                     }
