@@ -8,11 +8,11 @@ This directory contains example data packs, that demonstrate the customization o
 2. Open Minecraft.
 3. Create a new world.
 4. Select `Data Packs` in the world creation screen.
-5. Click on `Open Pack Folder`
+5. Click on `Open Pack Folder`.
 6. Put the data pack folder into the directory that you opened in step 5.
-7. Activate the added resource pack
-8. Click on `Done`
-9. Click on `Create New World`
+7. Activate the added resource pack.
+8. Click on `Done`.
+9. Click on `Create New World`.
 
 ## Example Data Packs
 
