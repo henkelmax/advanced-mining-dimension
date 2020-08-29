@@ -4,6 +4,8 @@ import de.maxhenkel.corelib.CommonRegistry;
 import de.maxhenkel.miningdimension.block.ModBlocks;
 import de.maxhenkel.miningdimension.config.ClientConfig;
 import de.maxhenkel.miningdimension.config.ServerConfig;
+import de.maxhenkel.miningdimension.dimension.NoLavaCanyonWorldCarver;
+import de.maxhenkel.miningdimension.dimension.NoLavaCaveWorldCarver;
 import de.maxhenkel.miningdimension.tileentity.TileentityTeleporter;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -12,6 +14,8 @@ import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
+import net.minecraft.world.gen.carver.WorldCarver;
+import net.minecraft.world.gen.feature.ProbabilityConfig;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -39,6 +43,7 @@ public class Main {
         FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(Item.class, this::registerItems);
         FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(Block.class, this::registerBlocks);
         FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(TileEntityType.class, this::registerTileEntities);
+        FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(WorldCarver.class, this::registerCarvers);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::commonSetup);
 
         SERVER_CONFIG = CommonRegistry.registerConfig(ModConfig.Type.SERVER, ServerConfig.class, true);
@@ -69,6 +74,12 @@ public class Main {
         TELEPORTER_TILEENTITY = TileEntityType.Builder.create(TileentityTeleporter::new, ModBlocks.TELEPORTER).build(null);
         TELEPORTER_TILEENTITY.setRegistryName(new ResourceLocation(MODID, "teleporter"));
         event.getRegistry().register(TELEPORTER_TILEENTITY);
+    }
+
+    @SubscribeEvent
+    public void registerCarvers(RegistryEvent.Register<WorldCarver<?>> event) {
+        event.getRegistry().register(new NoLavaCaveWorldCarver(ProbabilityConfig.field_236576_b_, 256));
+        event.getRegistry().register(new NoLavaCanyonWorldCarver(ProbabilityConfig.field_236576_b_));
     }
 
 }
