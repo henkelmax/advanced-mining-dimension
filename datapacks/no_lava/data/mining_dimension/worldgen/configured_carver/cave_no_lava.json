@@ -1,0 +1,6 @@
+{
+  "config": {
+    "probability": 0.14285715
+  },
+  "type": "mining_dimension:cave_no_lava"
+}
