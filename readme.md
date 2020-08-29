@@ -7,6 +7,7 @@
 - [GitHub](https://github.com/henkelmax/advanced-mining-dimension)
 - [FAQ](https://modrepo.de/minecraft/mining_dimension/faq)
 - [Credits](https://modrepo.de/minecraft/mining_dimension/credits)
+- [Example Data Packs](datapacks/)
 
 ---
 
