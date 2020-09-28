@@ -1,1 +1,1 @@
-- Added recipe advancements
+- Fixed experience not synced on dimension change

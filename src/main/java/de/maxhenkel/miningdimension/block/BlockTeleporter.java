@@ -64,6 +64,7 @@ public class BlockTeleporter extends Block implements ITileEntityProvider, IItem
                 return true;
             }
 
+            playerMP.addExperienceLevel(0);
             playerMP.teleport(teleportWorld, teleporterPos.getX() + 0.5D, teleporterPos.getY() + 1D, teleporterPos.getZ() + 0.5D, playerMP.rotationYaw, playerMP.rotationPitch);
         } else if (playerMP.world.func_234923_W_().equals(Main.SERVER_CONFIG.overworldDimension)) {
             ServerWorld teleportWorld = playerMP.server.getWorld(Main.MINING_DIMENSION);
@@ -81,6 +82,7 @@ public class BlockTeleporter extends Block implements ITileEntityProvider, IItem
             if (teleporterPos == null) {
                 return true;
             }
+            playerMP.addExperienceLevel(0);
             playerMP.teleport(teleportWorld, teleporterPos.getX() + 0.5D, teleporterPos.getY() + 1D, teleporterPos.getZ() + 0.5D, playerMP.rotationYaw, playerMP.rotationPitch);
         } else {
             playerMP.sendStatusMessage(new TranslationTextComponent("message.wrong_dimension"), true);
