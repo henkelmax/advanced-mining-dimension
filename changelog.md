@@ -1,1 +1,1 @@
-- Fixed experience not synced on dimension change
+- Updated mods.toml
