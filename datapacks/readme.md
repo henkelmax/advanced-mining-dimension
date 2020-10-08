@@ -45,6 +45,10 @@ Removes lava and water lakes from the mining dimension.
 
 Removes lava from the lower levels of caves and canyons.
 
+### [no_mobs](no_mobs/)
+
+Disables all monster spawning.
+
 ### [only_caves](only_caves/)
 
 Removes canyons and increases the amount of caves massively.
