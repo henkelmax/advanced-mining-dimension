@@ -1,1 +1,1 @@
-- Updated mods.toml
+- Fixed mixin not client side only
