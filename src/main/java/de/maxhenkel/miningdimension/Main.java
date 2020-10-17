@@ -1,7 +1,7 @@
 package de.maxhenkel.miningdimension;
 
 import de.maxhenkel.corelib.CommonRegistry;
-import de.maxhenkel.miningdimension.block.ModBlocks;
+import de.maxhenkel.miningdimension.block.BlockTeleporter;
 import de.maxhenkel.miningdimension.config.ClientConfig;
 import de.maxhenkel.miningdimension.config.ServerConfig;
 import de.maxhenkel.miningdimension.dimension.NoLavaCanyonWorldCarver;
@@ -33,8 +33,9 @@ public class Main {
 
     public static final Logger LOGGER = LogManager.getLogger(MODID);
 
+    public static final BlockTeleporter TELEPORTER = new BlockTeleporter();
     public static TileEntityType<TileentityTeleporter> TELEPORTER_TILEENTITY;
-    public static final RegistryKey<World> MINING_DIMENSION = RegistryKey.func_240903_a_(Registry.field_239699_ae_, new ResourceLocation(Main.MODID, "mining"));
+    public static RegistryKey<World> MINING_DIMENSION;
 
     public static ServerConfig SERVER_CONFIG;
     public static ClientConfig CLIENT_CONFIG;
@@ -53,25 +54,27 @@ public class Main {
     @SubscribeEvent
     public void commonSetup(FMLCommonSetupEvent event) {
         MinecraftForge.EVENT_BUS.register(this);
+
+        MINING_DIMENSION = RegistryKey.func_240903_a_(Registry.field_239699_ae_, new ResourceLocation(Main.MODID, "mining"));
     }
 
     @SubscribeEvent
     public void registerItems(RegistryEvent.Register<Item> event) {
         event.getRegistry().registerAll(
-                ModBlocks.TELEPORTER.toItem()
+                TELEPORTER.toItem()
         );
     }
 
     @SubscribeEvent
     public void registerBlocks(RegistryEvent.Register<Block> event) {
         event.getRegistry().registerAll(
-                ModBlocks.TELEPORTER
+                TELEPORTER
         );
     }
 
     @SubscribeEvent
     public void registerTileEntities(RegistryEvent.Register<TileEntityType<?>> event) {
-        TELEPORTER_TILEENTITY = TileEntityType.Builder.create(TileentityTeleporter::new, ModBlocks.TELEPORTER).build(null);
+        TELEPORTER_TILEENTITY = TileEntityType.Builder.create(TileentityTeleporter::new, TELEPORTER).build(null);
         TELEPORTER_TILEENTITY.setRegistryName(new ResourceLocation(MODID, "teleporter"));
         event.getRegistry().register(TELEPORTER_TILEENTITY);
     }

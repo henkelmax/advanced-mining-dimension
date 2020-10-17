@@ -1,1 +1,2 @@
-- Fixed mixin not client side only
+- Added message to notify the user when the dimension hasn't been created yet
+- Used ITeleporter implementation

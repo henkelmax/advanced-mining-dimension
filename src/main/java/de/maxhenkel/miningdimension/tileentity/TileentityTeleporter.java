@@ -8,4 +8,5 @@ public class TileentityTeleporter extends TileEntity {
     public TileentityTeleporter() {
         super(Main.TELEPORTER_TILEENTITY);
     }
+
 }
