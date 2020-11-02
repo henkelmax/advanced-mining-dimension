@@ -24,7 +24,7 @@ public class ServerConfig extends ConfigBase {
     @Override
     public void onReload(ModConfig.ModConfigEvent event) {
         super.onReload(event);
-        overworldDimension = RegistryKey.func_240903_a_(Registry.field_239699_ae_, new ResourceLocation(overworldDimensionSpec.get()));
+        overworldDimension = RegistryKey.getOrCreateKey(Registry.WORLD_KEY, new ResourceLocation(overworldDimensionSpec.get()));
     }
 
 }

@@ -55,7 +55,7 @@ public class Main {
     public void commonSetup(FMLCommonSetupEvent event) {
         MinecraftForge.EVENT_BUS.register(this);
 
-        MINING_DIMENSION = RegistryKey.func_240903_a_(Registry.field_239699_ae_, new ResourceLocation(Main.MODID, "mining"));
+        MINING_DIMENSION = RegistryKey.getOrCreateKey(Registry.WORLD_KEY, new ResourceLocation(Main.MODID, "mining"));
     }
 
     @SubscribeEvent
@@ -81,8 +81,8 @@ public class Main {
 
     @SubscribeEvent
     public void registerCarvers(RegistryEvent.Register<WorldCarver<?>> event) {
-        event.getRegistry().register(new NoLavaCaveWorldCarver(ProbabilityConfig.field_236576_b_, 256));
-        event.getRegistry().register(new NoLavaCanyonWorldCarver(ProbabilityConfig.field_236576_b_));
+        event.getRegistry().register(new NoLavaCaveWorldCarver(ProbabilityConfig.CODEC, 256));
+        event.getRegistry().register(new NoLavaCanyonWorldCarver(ProbabilityConfig.CODEC));
     }
 
 }

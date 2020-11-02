@@ -22,8 +22,8 @@ public class NoLavaCaveWorldCarver extends CaveWorldCarver {
     }
 
     @Override
-    protected boolean func_230358_a_(IChunk chunk, Function<BlockPos, Biome> biome, BitSet bitSet, Random random, BlockPos.Mutable blockPos, BlockPos.Mutable blockPos1, BlockPos.Mutable blockPos2, int i, int i1, int i2, int i3, int i4, int i5, int i6, int i7, MutableBoolean mutableBoolean) {
-        boolean b = super.func_230358_a_(chunk, biome, bitSet, random, blockPos, blockPos1, blockPos2, i, i1, i2, i3, i4, i5, i6, i7, mutableBoolean);
+    protected boolean carveBlock(IChunk chunk, Function<BlockPos, Biome> biome, BitSet bitSet, Random random, BlockPos.Mutable blockPos, BlockPos.Mutable blockPos1, BlockPos.Mutable blockPos2, int i, int i1, int i2, int i3, int i4, int i5, int i6, int i7, MutableBoolean mutableBoolean) {
+        boolean b = super.carveBlock(chunk, biome, bitSet, random, blockPos, blockPos1, blockPos2, i, i1, i2, i3, i4, i5, i6, i7, mutableBoolean);
         if (b) {
             chunk.setBlockState(blockPos, CAVE_AIR, false);
         }

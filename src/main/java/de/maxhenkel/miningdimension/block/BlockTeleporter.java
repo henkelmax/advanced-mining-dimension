@@ -55,14 +55,14 @@ public class BlockTeleporter extends Block implements ITileEntityProvider, IItem
             return false;
         }
 
-        if (player.world.func_234923_W_().equals(Main.MINING_DIMENSION)) {
+        if (player.world.getDimensionKey().equals(Main.MINING_DIMENSION)) {
             ServerWorld teleportWorld = player.server.getWorld(Main.SERVER_CONFIG.overworldDimension);
             if (teleportWorld == null) {
-                Main.LOGGER.error("Could not find overworld dimension '{}'.", Main.SERVER_CONFIG.overworldDimension.func_240901_a_());
+                Main.LOGGER.error("Could not find overworld dimension '{}'.", Main.SERVER_CONFIG.overworldDimension.getRegistryName());
                 return false;
             }
             player.changeDimension(teleportWorld, new MiningDimensionTeleporter(pos));
-        } else if (player.world.func_234923_W_().equals(Main.SERVER_CONFIG.overworldDimension)) {
+        } else if (player.world.getDimensionKey().equals(Main.SERVER_CONFIG.overworldDimension)) {
             ServerWorld teleportWorld = player.server.getWorld(Main.MINING_DIMENSION);
             if (teleportWorld == null) {
                 Main.LOGGER.error("Could not find mining dimension.");
@@ -78,17 +78,17 @@ public class BlockTeleporter extends Block implements ITileEntityProvider, IItem
     }
 
     private void sendBugMessage(PlayerEntity player) {
-        player.sendMessage(new StringTextComponent("The Mining Dimension hasn't been created yet. This is a ").func_230529_a_(TextComponentUtils.func_240647_a_(new StringTextComponent("BUG")).func_240700_a_((style) -> style
-                .func_240723_c_(TextFormatting.RED)
-                .func_240715_a_(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://bugs.mojang.com/browse/MC-195468"))
-                .func_240716_a_(new HoverEvent(HoverEvent.Action.field_230550_a_, new StringTextComponent("https://bugs.mojang.com/browse/MC-195468")))
-        )).func_230529_a_(new StringTextComponent(". ")), Util.field_240973_b_);
-        player.sendMessage(new StringTextComponent("A workaround can be found ").func_230529_a_(TextComponentUtils.func_240647_a_(new StringTextComponent("HERE"))
-                .func_240700_a_((style) -> style
-                        .func_240723_c_(TextFormatting.GREEN)
-                        .func_240715_a_(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://github.com/henkelmax/advanced-mining-dimension/issues/14#issuecomment-707924771"))
-                        .func_240716_a_(new HoverEvent(HoverEvent.Action.field_230550_a_, new StringTextComponent("https://github.com/henkelmax/advanced-mining-dimension/issues/14#issuecomment-707924771")))
-                )).func_230529_a_(new StringTextComponent(".")), Util.field_240973_b_);
+        player.sendMessage(new StringTextComponent("The Mining Dimension hasn't been created yet. This is a ").append(TextComponentUtils.wrapWithSquareBrackets(new StringTextComponent("BUG")).modifyStyle((style) -> style
+                .applyFormatting(TextFormatting.RED)
+                .setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://bugs.mojang.com/browse/MC-195468"))
+                .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new StringTextComponent("https://bugs.mojang.com/browse/MC-195468")))
+        )).appendString(". "), Util.DUMMY_UUID);
+        player.sendMessage(new StringTextComponent("A workaround can be found ").append(TextComponentUtils.wrapWithSquareBrackets(new StringTextComponent("HERE"))
+                .modifyStyle((style) -> style
+                        .applyFormatting(TextFormatting.GREEN)
+                        .setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://github.com/henkelmax/advanced-mining-dimension/issues/14#issuecomment-707924771"))
+                        .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new StringTextComponent("https://github.com/henkelmax/advanced-mining-dimension/issues/14#issuecomment-707924771")))
+                )).appendString("."), Util.DUMMY_UUID);
     }
 
     @Override

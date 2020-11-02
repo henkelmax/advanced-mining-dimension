@@ -35,7 +35,7 @@ public class MiningDimensionTeleporter implements ITeleporter {
         BlockPos teleporterPos = findPortalInChunk(chunk);
 
         if (teleporterPos == null) {
-            if (destWorld.func_234923_W_().equals(Main.MINING_DIMENSION)) {
+            if (destWorld.getDimensionKey().equals(Main.MINING_DIMENSION)) {
                 teleporterPos = placeTeleporterMining(destWorld, chunk);
             } else {
                 teleporterPos = placeTeleporterOverworld(destWorld, chunk);
