@@ -1,1 +1,1 @@
-- Updated to 1.16.4
+- Require Forge 35.0.15 or newer due to MinecraftForge/MinecraftForge#7445
