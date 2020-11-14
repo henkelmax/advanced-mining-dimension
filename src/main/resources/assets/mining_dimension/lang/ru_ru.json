@@ -1,0 +1,5 @@
+{
+  "block.mining_dimension.teleporter": "Телепортер измерении добычи",
+  "biome.mining_dimension.mining_biome": "Измерение добычи",
+  "message.wrong_dimension": "Телепортер не работает в этом измернии."
+}
