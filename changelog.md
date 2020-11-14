@@ -1,1 +1,1 @@
-- Require Forge 35.0.15 or newer due to MinecraftForge/MinecraftForge#7445
+- Added russian translation
