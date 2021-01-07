@@ -1,3 +1,5 @@
 {
-  "block.mining_dimension.teleporter": "挖掘维度传送器"
+  "block.mining_dimension.teleporter": "矿业维度传送器",
+  "biome.mining_dimension.mining_biome": "矿业维度",
+  "message.wrong_dimension": "传送器不能在当前维度工作"
 }
