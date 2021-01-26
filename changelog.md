@@ -1,1 +1,1 @@
-- Update to 1.16.5
+- Updated chinese translation
