@@ -1,1 +1,1 @@
-- Updated chinese translation
+- Fixed crash with latest forge version
