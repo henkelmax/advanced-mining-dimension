@@ -1,0 +1,5 @@
+{
+  "block.mining_dimension.teleporter": "採掘ディメンションテレポーター",
+  "biome.mining_dimension.mining_biome": "採掘ディメンション",
+  "message.wrong_dimension": "このディメンションではテレポーターを利用できません"
+}
