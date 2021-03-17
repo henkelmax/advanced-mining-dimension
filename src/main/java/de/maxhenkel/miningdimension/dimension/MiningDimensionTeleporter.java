@@ -35,7 +35,7 @@ public class MiningDimensionTeleporter implements ITeleporter {
         BlockPos teleporterPos = findPortalInChunk(chunk);
 
         if (teleporterPos == null) {
-            if (destWorld.getDimensionKey().equals(Main.MINING_DIMENSION)) {
+            if (destWorld.dimension().equals(Main.MINING_DIMENSION)) {
                 teleporterPos = placeTeleporterMining(destWorld, chunk);
             } else {
                 teleporterPos = placeTeleporterOverworld(destWorld, chunk);
@@ -45,16 +45,16 @@ public class MiningDimensionTeleporter implements ITeleporter {
             return e;
         }
 
-        player.addExperienceLevel(0);
-        player.setPositionAndUpdate(teleporterPos.getX() + 0.5D, teleporterPos.getY() + 1D, teleporterPos.getZ() + 0.5D);
+        player.giveExperienceLevels(0);
+        player.teleportTo(teleporterPos.getX() + 0.5D, teleporterPos.getY() + 1D, teleporterPos.getZ() + 0.5D);
         return e;
     }
 
     private BlockPos findPortalInChunk(Chunk chunk) {
-        for (TileEntity tile : chunk.getTileEntityMap().values()) {
+        for (TileEntity tile : chunk.getBlockEntities().values()) {
             if (tile instanceof TileentityTeleporter) {
-                BlockPos pos = tile.getPos();
-                if (chunk.getBlockState(pos.up()).isAir()) {
+                BlockPos pos = tile.getBlockPos();
+                if (chunk.getBlockState(pos.above()).isAir()) {
                     return pos;
                 }
             }
@@ -67,10 +67,10 @@ public class MiningDimensionTeleporter implements ITeleporter {
         for (int y = 0; y < 255; y++) {
             for (int x = 0; x < 16; x++) {
                 for (int z = 0; z < 16; z++) {
-                    pos.setPos(x, y, z);
-                    if (chunk.getBlockState(pos).isAir() && chunk.getBlockState(pos.up(1)).isAir() && chunk.getBlockState(pos.up(2)).isAir()) {
-                        BlockPos absolutePos = chunk.getPos().asBlockPos().add(pos.getX(), pos.getY(), pos.getZ());
-                        world.setBlockState(absolutePos, Main.TELEPORTER.getDefaultState());
+                    pos.set(x, y, z);
+                    if (chunk.getBlockState(pos).isAir() && chunk.getBlockState(pos.above(1)).isAir() && chunk.getBlockState(pos.above(2)).isAir()) {
+                        BlockPos absolutePos = chunk.getPos().getWorldPosition().offset(pos.getX(), pos.getY(), pos.getZ());
+                        world.setBlockAndUpdate(absolutePos, Main.TELEPORTER.defaultBlockState());
                         return absolutePos;
                     }
                 }
@@ -80,32 +80,32 @@ public class MiningDimensionTeleporter implements ITeleporter {
         for (int y = 0; y < 255; y++) {
             for (int x = 0; x < 16; x++) {
                 for (int z = 0; z < 16; z++) {
-                    pos.setPos(x, y, z);
-                    if (isAirOrStone(chunk, pos) && isAirOrStone(chunk, pos.up(1)) && isAirOrStone(chunk, pos.up(2))) {
-                        BlockPos absolutePos = chunk.getPos().asBlockPos().add(pos.getX(), pos.getY(), pos.getZ());
-                        if (isReplaceable(world, absolutePos.up(3)) &&
-                                isReplaceable(world, absolutePos.up(1).offset(Direction.NORTH)) &&
-                                isReplaceable(world, absolutePos.up(1).offset(Direction.NORTH)) &&
-                                isReplaceable(world, absolutePos.up(1).offset(Direction.SOUTH)) &&
-                                isReplaceable(world, absolutePos.up(1).offset(Direction.EAST)) &&
-                                isReplaceable(world, absolutePos.up(1).offset(Direction.WEST)) &&
-                                isReplaceable(world, absolutePos.up(2).offset(Direction.NORTH)) &&
-                                isReplaceable(world, absolutePos.up(2).offset(Direction.SOUTH)) &&
-                                isReplaceable(world, absolutePos.up(2).offset(Direction.EAST)) &&
-                                isReplaceable(world, absolutePos.up(2).offset(Direction.WEST))
+                    pos.set(x, y, z);
+                    if (isAirOrStone(chunk, pos) && isAirOrStone(chunk, pos.above(1)) && isAirOrStone(chunk, pos.above(2))) {
+                        BlockPos absolutePos = chunk.getPos().getWorldPosition().offset(pos.getX(), pos.getY(), pos.getZ());
+                        if (isReplaceable(world, absolutePos.above(3)) &&
+                                isReplaceable(world, absolutePos.above(1).relative(Direction.NORTH)) &&
+                                isReplaceable(world, absolutePos.above(1).relative(Direction.NORTH)) &&
+                                isReplaceable(world, absolutePos.above(1).relative(Direction.SOUTH)) &&
+                                isReplaceable(world, absolutePos.above(1).relative(Direction.EAST)) &&
+                                isReplaceable(world, absolutePos.above(1).relative(Direction.WEST)) &&
+                                isReplaceable(world, absolutePos.above(2).relative(Direction.NORTH)) &&
+                                isReplaceable(world, absolutePos.above(2).relative(Direction.SOUTH)) &&
+                                isReplaceable(world, absolutePos.above(2).relative(Direction.EAST)) &&
+                                isReplaceable(world, absolutePos.above(2).relative(Direction.WEST))
                         ) {
-                            world.setBlockState(absolutePos, Main.TELEPORTER.getDefaultState());
-                            world.setBlockState(absolutePos.up(1), Blocks.AIR.getDefaultState());
-                            world.setBlockState(absolutePos.up(2), Blocks.AIR.getDefaultState());
-                            world.setBlockState(absolutePos.up(3), Blocks.STONE.getDefaultState());
-                            world.setBlockState(absolutePos.up(1).offset(Direction.NORTH), Blocks.STONE.getDefaultState());
-                            world.setBlockState(absolutePos.up(1).offset(Direction.SOUTH), Blocks.STONE.getDefaultState());
-                            world.setBlockState(absolutePos.up(1).offset(Direction.EAST), Blocks.STONE.getDefaultState());
-                            world.setBlockState(absolutePos.up(1).offset(Direction.WEST), Blocks.STONE.getDefaultState());
-                            world.setBlockState(absolutePos.up(2).offset(Direction.NORTH), Blocks.STONE.getDefaultState());
-                            world.setBlockState(absolutePos.up(2).offset(Direction.SOUTH), Blocks.STONE.getDefaultState());
-                            world.setBlockState(absolutePos.up(2).offset(Direction.EAST), Blocks.STONE.getDefaultState());
-                            world.setBlockState(absolutePos.up(2).offset(Direction.WEST), Blocks.STONE.getDefaultState());
+                            world.setBlockAndUpdate(absolutePos, Main.TELEPORTER.defaultBlockState());
+                            world.setBlockAndUpdate(absolutePos.above(1), Blocks.AIR.defaultBlockState());
+                            world.setBlockAndUpdate(absolutePos.above(2), Blocks.AIR.defaultBlockState());
+                            world.setBlockAndUpdate(absolutePos.above(3), Blocks.STONE.defaultBlockState());
+                            world.setBlockAndUpdate(absolutePos.above(1).relative(Direction.NORTH), Blocks.STONE.defaultBlockState());
+                            world.setBlockAndUpdate(absolutePos.above(1).relative(Direction.SOUTH), Blocks.STONE.defaultBlockState());
+                            world.setBlockAndUpdate(absolutePos.above(1).relative(Direction.EAST), Blocks.STONE.defaultBlockState());
+                            world.setBlockAndUpdate(absolutePos.above(1).relative(Direction.WEST), Blocks.STONE.defaultBlockState());
+                            world.setBlockAndUpdate(absolutePos.above(2).relative(Direction.NORTH), Blocks.STONE.defaultBlockState());
+                            world.setBlockAndUpdate(absolutePos.above(2).relative(Direction.SOUTH), Blocks.STONE.defaultBlockState());
+                            world.setBlockAndUpdate(absolutePos.above(2).relative(Direction.EAST), Blocks.STONE.defaultBlockState());
+                            world.setBlockAndUpdate(absolutePos.above(2).relative(Direction.WEST), Blocks.STONE.defaultBlockState());
                             return absolutePos;
                         }
                     }
@@ -138,10 +138,10 @@ public class MiningDimensionTeleporter implements ITeleporter {
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
                 for (int y = 63; y < 255; y++) {
-                    pos.setPos(x, y, z);
-                    if (chunk.getBlockState(pos).isAir() && chunk.getBlockState(pos.up(1)).isAir()) {
-                        BlockPos absolutePos = chunk.getPos().asBlockPos().add(pos.getX(), pos.getY(), pos.getZ());
-                        world.setBlockState(absolutePos, Main.TELEPORTER.getDefaultState());
+                    pos.set(x, y, z);
+                    if (chunk.getBlockState(pos).isAir() && chunk.getBlockState(pos.above(1)).isAir()) {
+                        BlockPos absolutePos = chunk.getPos().getWorldPosition().offset(pos.getX(), pos.getY(), pos.getZ());
+                        world.setBlockAndUpdate(absolutePos, Main.TELEPORTER.defaultBlockState());
                         return absolutePos;
                     }
                 }

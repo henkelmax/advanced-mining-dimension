@@ -33,17 +33,17 @@ import javax.annotation.Nullable;
 public class BlockTeleporter extends Block implements ITileEntityProvider, IItemBlock {
 
     public BlockTeleporter() {
-        super(Properties.create(Material.WOOD).hardnessAndResistance(3F).sound(SoundType.WOOD));
+        super(Properties.of(Material.WOOD).strength(3F).sound(SoundType.WOOD));
         setRegistryName(new ResourceLocation(Main.MODID, "teleporter"));
     }
 
     @Override
     public Item toItem() {
-        return new BlockItem(this, new Item.Properties().group(ItemGroup.DECORATIONS)).setRegistryName(getRegistryName());
+        return new BlockItem(this, new Item.Properties().tab(ItemGroup.TAB_DECORATIONS)).setRegistryName(getRegistryName());
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult result) {
+    public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult result) {
         if (player instanceof ServerPlayerEntity) {
             transferPlayer((ServerPlayerEntity) player, pos);
         }
@@ -51,19 +51,19 @@ public class BlockTeleporter extends Block implements ITileEntityProvider, IItem
     }
 
     public boolean transferPlayer(ServerPlayerEntity player, BlockPos pos) {
-        if (player.getRidingEntity() != null || player.isBeingRidden()) {
+        if (player.getVehicle() != null || player.isVehicle()) {
             return false;
         }
 
-        if (player.world.getDimensionKey().equals(Main.MINING_DIMENSION)) {
-            ServerWorld teleportWorld = player.server.getWorld(Main.SERVER_CONFIG.overworldDimension);
+        if (player.level.dimension().equals(Main.MINING_DIMENSION)) {
+            ServerWorld teleportWorld = player.server.getLevel(Main.SERVER_CONFIG.overworldDimension);
             if (teleportWorld == null) {
                 Main.LOGGER.error("Could not find overworld dimension '{}'.", Main.SERVER_CONFIG.overworldDimension.getRegistryName());
                 return false;
             }
             player.changeDimension(teleportWorld, new MiningDimensionTeleporter(pos));
-        } else if (player.world.getDimensionKey().equals(Main.SERVER_CONFIG.overworldDimension)) {
-            ServerWorld teleportWorld = player.server.getWorld(Main.MINING_DIMENSION);
+        } else if (player.level.dimension().equals(Main.SERVER_CONFIG.overworldDimension)) {
+            ServerWorld teleportWorld = player.server.getLevel(Main.MINING_DIMENSION);
             if (teleportWorld == null) {
                 Main.LOGGER.error("Could not find mining dimension.");
                 sendBugMessage(player);
@@ -71,34 +71,34 @@ public class BlockTeleporter extends Block implements ITileEntityProvider, IItem
             }
             player.changeDimension(teleportWorld, new MiningDimensionTeleporter(pos));
         } else {
-            player.sendStatusMessage(new TranslationTextComponent("message.wrong_dimension"), true);
+            player.displayClientMessage(new TranslationTextComponent("message.wrong_dimension"), true);
         }
 
         return true;
     }
 
     private void sendBugMessage(PlayerEntity player) {
-        player.sendMessage(new StringTextComponent("The Mining Dimension hasn't been created yet. This is a ").append(TextComponentUtils.wrapWithSquareBrackets(new StringTextComponent("BUG")).modifyStyle((style) -> style
-                .applyFormatting(TextFormatting.RED)
-                .setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://bugs.mojang.com/browse/MC-195468"))
-                .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new StringTextComponent("https://bugs.mojang.com/browse/MC-195468")))
-        )).appendString(". "), Util.DUMMY_UUID);
-        player.sendMessage(new StringTextComponent("A workaround can be found ").append(TextComponentUtils.wrapWithSquareBrackets(new StringTextComponent("HERE"))
-                .modifyStyle((style) -> style
-                        .applyFormatting(TextFormatting.GREEN)
-                        .setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://github.com/henkelmax/advanced-mining-dimension/issues/14#issuecomment-707924771"))
-                        .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new StringTextComponent("https://github.com/henkelmax/advanced-mining-dimension/issues/14#issuecomment-707924771")))
-                )).appendString("."), Util.DUMMY_UUID);
+        player.sendMessage(new StringTextComponent("The Mining Dimension hasn't been created yet. This is a ").append(TextComponentUtils.wrapInSquareBrackets(new StringTextComponent("BUG")).withStyle((style) -> style
+                .applyFormat(TextFormatting.RED)
+                .withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://bugs.mojang.com/browse/MC-195468"))
+                .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new StringTextComponent("https://bugs.mojang.com/browse/MC-195468")))
+        )).append(". "), Util.NIL_UUID);
+        player.sendMessage(new StringTextComponent("A workaround can be found ").append(TextComponentUtils.wrapInSquareBrackets(new StringTextComponent("HERE"))
+                .withStyle((style) -> style
+                        .applyFormat(TextFormatting.GREEN)
+                        .withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://github.com/henkelmax/advanced-mining-dimension/issues/14#issuecomment-707924771"))
+                        .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new StringTextComponent("https://github.com/henkelmax/advanced-mining-dimension/issues/14#issuecomment-707924771")))
+                )).append("."), Util.NIL_UUID);
     }
 
     @Override
-    public BlockRenderType getRenderType(BlockState state) {
+    public BlockRenderType getRenderShape(BlockState state) {
         return BlockRenderType.MODEL;
     }
 
     @Nullable
     @Override
-    public TileEntity createNewTileEntity(IBlockReader world) {
+    public TileEntity newBlockEntity(IBlockReader world) {
         return new TileentityTeleporter();
     }
 

@@ -55,7 +55,7 @@ public class Main {
     public void commonSetup(FMLCommonSetupEvent event) {
         MinecraftForge.EVENT_BUS.register(this);
 
-        MINING_DIMENSION = RegistryKey.getOrCreateKey(Registry.WORLD_KEY, new ResourceLocation(Main.MODID, "mining"));
+        MINING_DIMENSION = RegistryKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(Main.MODID, "mining"));
     }
 
     @SubscribeEvent
@@ -74,7 +74,7 @@ public class Main {
 
     @SubscribeEvent
     public void registerTileEntities(RegistryEvent.Register<TileEntityType<?>> event) {
-        TELEPORTER_TILEENTITY = TileEntityType.Builder.create(TileentityTeleporter::new, TELEPORTER).build(null);
+        TELEPORTER_TILEENTITY = TileEntityType.Builder.of(TileentityTeleporter::new, TELEPORTER).build(null);
         TELEPORTER_TILEENTITY.setRegistryName(new ResourceLocation(MODID, "teleporter"));
         event.getRegistry().register(TELEPORTER_TILEENTITY);
     }

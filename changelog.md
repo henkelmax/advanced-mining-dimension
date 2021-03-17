@@ -1,1 +1,1 @@
-- Added japanese translation
+- Updated to official mappings
