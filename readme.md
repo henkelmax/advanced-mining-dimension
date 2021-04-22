@@ -1,5 +1,4 @@
-# Advanced Mining Dimension ![](http://cf.way2muchnoise.eu/full_332640_downloads.svg)
-![](http://cf.way2muchnoise.eu/versions/332640.svg)
+# Advanced Mining Dimension ![](http://cf.way2muchnoise.eu/full_332640_downloads.svg) ![](http://cf.way2muchnoise.eu/versions/332640.svg)
 
 ## Links
 - [CurseForge](https://www.curseforge.com/minecraft/mc-mods/advanced-mining-dimension)
