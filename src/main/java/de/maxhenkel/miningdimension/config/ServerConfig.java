@@ -11,6 +11,7 @@ import net.minecraftforge.fml.config.ModConfig;
 public class ServerConfig extends ConfigBase {
 
     private final ForgeConfigSpec.ConfigValue<String> overworldDimensionSpec;
+    public final ForgeConfigSpec.BooleanValue spawnDeep;
 
     public RegistryKey<World> overworldDimension;
 
@@ -19,6 +20,9 @@ public class ServerConfig extends ConfigBase {
         overworldDimensionSpec = builder
                 .comment("The dimension from where you can teleport to the mining dimension and back")
                 .define("overworld_dimension", "minecraft:overworld");
+        spawnDeep = builder
+                .comment("If the teleporter should bring you to the lowest free space in the mining dimension")
+                .define("spawn_deep", true);
     }
 
     @Override

@@ -14,7 +14,10 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.ITeleporter;
 
+import java.util.Comparator;
+import java.util.Map;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 public class MiningDimensionTeleporter implements ITeleporter {
 
@@ -51,20 +54,31 @@ public class MiningDimensionTeleporter implements ITeleporter {
     }
 
     private BlockPos findPortalInChunk(Chunk chunk) {
-        for (TileEntity tile : chunk.getBlockEntities().values()) {
-            if (tile instanceof TileentityTeleporter) {
-                BlockPos pos = tile.getBlockPos();
-                if (chunk.getBlockState(pos.above()).isAir()) {
-                    return pos;
-                }
+        Stream<Map.Entry<BlockPos, TileEntity>> stream = chunk.getBlockEntities()
+                .entrySet()
+                .stream()
+                .filter(entry -> entry.getValue() instanceof TileentityTeleporter);
+
+        BlockPos teleporter;
+
+        if (Main.SERVER_CONFIG.spawnDeep.get()) {
+            teleporter = stream.sorted(Comparator.comparingInt(o -> o.getKey().getY())).map(Map.Entry::getKey).findFirst().orElse(null);
+        } else {
+            teleporter = stream.sorted((o1, o2) -> o2.getKey().getY() - o1.getKey().getY()).map(Map.Entry::getKey).findFirst().orElse(null);
+        }
+
+        if (teleporter != null) {
+            if (chunk.getBlockState(teleporter.above()).isAir()) {
+                return teleporter;
             }
         }
         return null;
     }
 
     private BlockPos placeTeleporterMining(ServerWorld world, Chunk chunk) {
+        boolean deep = Main.SERVER_CONFIG.spawnDeep.get();
         BlockPos.Mutable pos = new BlockPos.Mutable();
-        for (int y = 0; y < 255; y++) {
+        for (int y = deep ? 0 : world.getHeight() - 1; (deep ? y < world.getHeight() - 1 : y >= 0); y = (deep ? y + 1 : y - 1)) {
             for (int x = 0; x < 16; x++) {
                 for (int z = 0; z < 16; z++) {
                     pos.set(x, y, z);
@@ -77,7 +91,7 @@ public class MiningDimensionTeleporter implements ITeleporter {
             }
         }
 
-        for (int y = 0; y < 255; y++) {
+        for (int y = deep ? 0 : world.getHeight() - 1; (deep ? y < world.getHeight() - 1 : y >= 0); y = (deep ? y + 1 : y - 1)) {
             for (int x = 0; x < 16; x++) {
                 for (int z = 0; z < 16; z++) {
                     pos.set(x, y, z);
@@ -137,7 +151,7 @@ public class MiningDimensionTeleporter implements ITeleporter {
         BlockPos.Mutable pos = new BlockPos.Mutable();
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
-                for (int y = 63; y < 255; y++) {
+                for (int y = 63; y < 255; y++) { // TODO world height & sea level in 1.17
                     pos.set(x, y, z);
                     if (chunk.getBlockState(pos).isAir() && chunk.getBlockState(pos.above(1)).isAir()) {
                         BlockPos absolutePos = chunk.getPos().getWorldPosition().offset(pos.getX(), pos.getY(), pos.getZ());

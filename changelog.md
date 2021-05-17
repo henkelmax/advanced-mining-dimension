@@ -1,1 +1,1 @@
-- Updated to official mappings
+- Added spawn location config option
