@@ -1,0 +1,5 @@
+{
+  "block.mining_dimension.teleporter": "Téléporteur dans la dimension de minage",
+  "biome.mining_dimension.mining_biome": "Dimension de minage",
+  "message.wrong_dimension": "Le téléporteur ne fonctionne pas dans cette dimension"
+}
