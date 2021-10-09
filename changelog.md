@@ -1,1 +1,1 @@
-- Added spawn location config option
+- Added french translation
