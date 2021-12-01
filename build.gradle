@@ -7,23 +7,22 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '4.1.+', changing: true
-        classpath group: 'de.maxhenkel.forge-update', name: 'forge-update', version: '1.0.2'
-        classpath group: 'com.github.jengelman.gradle.plugins', name: 'shadow', version: '4.0.4'
-        classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
+        classpath group: 'de.maxhenkel.forge-update', name: 'forge-update', version: '1.0.4'
+//        classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
     }
 }
 
 plugins {
     // https://github.com/matthewprenger/CurseGradle
     id "com.matthewprenger.cursegradle" version "1.4.0"
+    id "com.github.johnrengelman.shadow" version "7.0.0"
 }
 
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'forge-update'
-apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'idea'
-apply plugin: 'org.spongepowered.mixin'
+//apply plugin: 'org.spongepowered.mixin'
 
 idea {
     module {
@@ -36,7 +35,7 @@ version = mod_version
 group = mod_packagename
 archivesBaseName = mod_id
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(8)
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 minecraft {
     mappings channel: 'official', version: mod_minecraft_version
@@ -86,12 +85,12 @@ dependencies {
     runtimeOnly fg.deobf("de.maxhenkel.corelib:corelib:${mod_minecraft_version}-${corelib_version}")
     runtimeOnly fg.deobf("de.maxhenkel.corelib:corelib:${mod_minecraft_version}-${corelib_version}:javadoc")
 
-    annotationProcessor 'org.spongepowered:mixin:0.8:processor'
+//    annotationProcessor 'org.spongepowered:mixin:0.8:processor'
 }
 
-mixin {
+/*mixin {
     add sourceSets.main, "mining_dimension.refmap.json"
-}
+}*/
 
 jar {
     manifest {
@@ -102,16 +101,13 @@ jar {
                     "Implementation-Version"  : mod_version,
                     "Implementation-Vendor"   : mod_vendor,
                     "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-                    "MixinConnector"          : "de.maxhenkel.miningdimension.mixin.MixinConnector"])
+//                    "MixinConnector"          : "de.maxhenkel.miningdimension.mixin.MixinConnector"
+        ])
     }
 }
 
 processResources {
-    inputs.property "version", project.version
-
-    from(sourceSets.main.resources.srcDirs) {
-        include '**/*.toml'
-
+    filesMatching("**/*.toml") {
         expand 'mod_id': mod_id,
                 'mod_version': mod_version,
                 'mod_vendor': mod_vendor,
@@ -119,9 +115,6 @@ processResources {
                 'mod_forge_version': mod_forge_version,
                 'mod_loader_version': mod_loader_version,
                 'mod_minecraft_version': mod_minecraft_version
-    }
-    from(sourceSets.main.resources.srcDirs) {
-        exclude '**/*.toml'
     }
 }
 
@@ -140,6 +133,8 @@ curseforge {
         changelog = file('changelog.md')
         releaseType = curse_release_type
         addGameVersion mod_minecraft_version
+        addGameVersion 'Forge'
+        addGameVersion 'Java 17'
         mainArtifact(jar) {
             displayName = "[${mod_minecraft_version}] ${mod_name} ${mod_version}"
         }
@@ -183,7 +178,7 @@ javadoc {
 }
 
 task deobfJar(type: Jar) {
-    classifier = 'deobf'
+    classifier 'deobf'
     from sourceSets.main.output
     manifest {
         attributes(["Specification-Title"     : mod_name,
@@ -198,12 +193,12 @@ task deobfJar(type: Jar) {
 }
 
 task sourcesJar(type: Jar) {
-    classifier = 'sources'
+    classifier 'sources'
     from sourceSets.main.allJava
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
+    classifier 'javadoc'
     from javadoc.getDestinationDir()
 }
 
@@ -219,10 +214,22 @@ jar.finalizedBy('reobfJar')
 shadowJar {
     project.configurations.shadow.setTransitive(true);
     configurations = [project.configurations.shadow]
-    classifier = ""
-    relocate 'de.maxhenkel.corelib', "de.maxhenkel.${mod_id}.corelib"
+    classifier ""
+    relocate 'de.maxhenkel.corelib', "de.maxhenkel.miningdimension.corelib"
 }
 
 reobf {
     shadowJar {}
+}
+
+sourceSets {
+    main {
+        java {
+            exclude 'de/maxhenkel/miningdimension/mixin/*/**'
+        }
+        resources {
+            exclude 'META-INF/MANIFEST.MF'
+            exclude 'assets/mining_dimension/mining_dimension.mixins.json'
+        }
+    }
 }

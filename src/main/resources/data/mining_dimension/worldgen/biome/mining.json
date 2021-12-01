@@ -1,5 +1,4 @@
 {
-  "scale": 1,
   "effects": {
     "mood_sound": {
       "sound": "minecraft:ambient.cave",
@@ -12,37 +11,49 @@
     "water_color": 4159204,
     "water_fog_color": 329011
   },
-  "surface_builder": "mining_dimension:mining",
   "carvers": {
     "air": [
       "minecraft:cave",
+      "minecraft:cave_extra_underground",
       "minecraft:canyon"
     ]
   },
   "features": [
     [
-      "minecraft:lake_water",
-      "minecraft:lake_lava",
+      "minecraft:lake_lava_underground",
+      "minecraft:amethyst_geode",
       "minecraft:monster_room",
+      "minecraft:monster_room_deep",
       "minecraft:ore_dirt",
       "minecraft:ore_gravel",
-      "minecraft:ore_granite",
-      "minecraft:ore_diorite",
-      "minecraft:ore_andesite",
-      "minecraft:ore_coal",
-      "minecraft:ore_iron",
+      "minecraft:ore_granite_upper",
+      "minecraft:ore_granite_lower",
+      "minecraft:ore_diorite_upper",
+      "minecraft:ore_diorite_lower",
+      "minecraft:ore_andesite_upper",
+      "minecraft:ore_andesite_lower",
+      "minecraft:ore_tuff",
+      "minecraft:ore_coal_upper",
+      "minecraft:ore_coal_lower",
+      "minecraft:ore_iron_upper",
+      "minecraft:ore_iron_middle",
+      "minecraft:ore_iron_small",
       "minecraft:ore_gold",
+      "minecraft:ore_gold_lower",
       "minecraft:ore_redstone",
+      "minecraft:ore_redstone_lower",
       "minecraft:ore_diamond",
+      "minecraft:ore_diamond_large",
+      "minecraft:ore_diamond_buried",
       "minecraft:ore_lapis",
+      "minecraft:ore_lapis_buried",
+      "minecraft:ore_copper",
+      "minecraft:underwater_magma",
       "minecraft:disk_sand",
       "minecraft:disk_clay",
-      "minecraft:disk_gravel"
+      "minecraft:disk_gravel",
+      "minecraft:glow_lichen"
     ]
-  ],
-  "starts": [
-    "minecraft:mineshaft",
-    "minecraft:ruined_portal"
   ],
   "spawners": {
     "monster": [
@@ -104,15 +115,22 @@
         "maxCount": 8
       }
     ],
+    "axolotls": [],
+    "underground_water_creature": [
+      {
+        "type": "minecraft:glow_squid",
+        "weight": 10,
+        "minCount": 4,
+        "maxCount": 6
+      }
+    ],
     "water_creature": [],
     "water_ambient": [],
     "misc": []
   },
   "spawn_costs": {},
-  "player_spawn_friendly": false,
   "precipitation": "none",
   "temperature": 0.6,
   "downfall": 0.0,
-  "category": "none",
-  "depth": 0.1
+  "category": "none"
 }

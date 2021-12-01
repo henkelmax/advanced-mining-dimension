@@ -1,10 +1,92 @@
 {
-  "bedrock_roof_position": 0,
-  "bedrock_floor_position": 0,
-  "sea_level": 0,
+  "ore_veins_enabled": true,
+  "noodle_caves_enabled": true,
+  "legacy_random_source": false,
   "disable_mob_generation": false,
+  "aquifers_enabled": true,
+  "noise_caves_enabled": true,
+  "default_fluid": {
+    "Properties": {
+      "level": "0"
+    },
+    "Name": "minecraft:lava"
+  },
+  "surface_rule": {
+    "sequence": [
+      {
+        "if_true": {
+          "invert": {
+            "random_name": "minecraft:bedrock_roof",
+            "true_at_and_below": {
+              "below_top": 5
+            },
+            "false_at_and_above": {
+              "below_top": 0
+            },
+            "type": "minecraft:vertical_gradient"
+          },
+          "type": "minecraft:not"
+        },
+        "then_run": {
+          "result_state": {
+            "Name": "minecraft:bedrock"
+          },
+          "type": "minecraft:block"
+        },
+        "type": "minecraft:condition"
+      },
+      {
+        "if_true": {
+          "random_name": "minecraft:bedrock_floor",
+          "true_at_and_below": {
+            "above_bottom": 0
+          },
+          "false_at_and_above": {
+            "above_bottom": 5
+          },
+          "type": "minecraft:vertical_gradient"
+        },
+        "then_run": {
+          "result_state": {
+            "Name": "minecraft:bedrock"
+          },
+          "type": "minecraft:block"
+        },
+        "type": "minecraft:condition"
+      },
+      {
+        "if_true": {
+          "random_name": "minecraft:deepslate",
+          "true_at_and_below": {
+            "absolute": 0
+          },
+          "false_at_and_above": {
+            "absolute": 8
+          },
+          "type": "minecraft:vertical_gradient"
+        },
+        "then_run": {
+          "result_state": {
+            "Properties": {
+              "axis": "y"
+            },
+            "Name": "minecraft:deepslate"
+          },
+          "type": "minecraft:block"
+        },
+        "type": "minecraft:condition"
+      }
+    ],
+    "type": "minecraft:sequence"
+  },
+  "sea_level": -48,
   "structures": {
     "structures": {
+      "minecraft:mineshaft": {
+        "spacing": 1,
+        "separation": 0,
+        "salt": 0
+      },
       "minecraft:nether_fossil": {
         "spacing": 2,
         "separation": 1,
@@ -13,36 +95,33 @@
     }
   },
   "noise": {
-    "density_factor": 1.0,
-    "density_offset": 2.0,
-    "simplex_surface_noise": true,
-    "bottom_slide": {
-      "target": 0,
-      "size": 0,
-      "offset": 0
+    "terrain_shaper": {
+      "offset": 0.0,
+      "factor": 0.0,
+      "jaggedness": 0.0
     },
     "size_horizontal": 1,
     "size_vertical": 2,
-    "height": 256,
     "sampling": {
       "xz_scale": 1.0,
-      "y_scale": 1.0,
-      "xz_factor": 1.0,
-      "y_factor": 1.0
+      "y_scale": 3.0,
+      "xz_factor": 80.0,
+      "y_factor": 60.0
     },
     "top_slide": {
-      "target": 0,
-      "size": 0,
+      "target": 0.9375,
+      "size": 3,
       "offset": 0
-    }
+    },
+    "bottom_slide": {
+      "target": 2.5,
+      "size": 4,
+      "offset": -1
+    },
+    "min_y": -64,
+    "height": 128
   },
   "default_block": {
     "Name": "minecraft:stone"
-  },
-  "default_fluid": {
-    "Properties": {
-      "level": "0"
-    },
-    "Name": "minecraft:lava"
   }
 }

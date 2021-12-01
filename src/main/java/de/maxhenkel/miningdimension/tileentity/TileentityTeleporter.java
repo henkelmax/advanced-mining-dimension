@@ -1,12 +1,14 @@
 package de.maxhenkel.miningdimension.tileentity;
 
 import de.maxhenkel.miningdimension.Main;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 
-public class TileentityTeleporter extends TileEntity {
+public class TileentityTeleporter extends BlockEntity {
 
-    public TileentityTeleporter() {
-        super(Main.TELEPORTER_TILEENTITY);
+    public TileentityTeleporter(BlockPos pos, BlockState state) {
+        super(Main.TELEPORTER_TILEENTITY, pos, state);
     }
 
 }

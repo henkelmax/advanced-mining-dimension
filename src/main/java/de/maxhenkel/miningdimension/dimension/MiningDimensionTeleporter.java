@@ -2,16 +2,16 @@ package de.maxhenkel.miningdimension.dimension;
 
 import de.maxhenkel.miningdimension.Main;
 import de.maxhenkel.miningdimension.tileentity.TileentityTeleporter;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraftforge.common.util.ITeleporter;
 
 import java.util.Comparator;
@@ -28,13 +28,13 @@ public class MiningDimensionTeleporter implements ITeleporter {
     }
 
     @Override
-    public Entity placeEntity(Entity entity, ServerWorld currentWorld, ServerWorld destWorld, float yaw, Function<Boolean, Entity> repositionEntity) {
+    public Entity placeEntity(Entity entity, ServerLevel currentWorld, ServerLevel destWorld, float yaw, Function<Boolean, Entity> repositionEntity) {
         Entity e = repositionEntity.apply(false);
-        if (!(e instanceof ServerPlayerEntity)) {
+        if (!(e instanceof ServerPlayer)) {
             return e;
         }
-        ServerPlayerEntity player = (ServerPlayerEntity) e;
-        Chunk chunk = (Chunk) destWorld.getChunk(pos);
+        ServerPlayer player = (ServerPlayer) e;
+        LevelChunk chunk = (LevelChunk) destWorld.getChunk(pos);
         BlockPos teleporterPos = findPortalInChunk(chunk);
 
         if (teleporterPos == null) {
@@ -53,8 +53,8 @@ public class MiningDimensionTeleporter implements ITeleporter {
         return e;
     }
 
-    private BlockPos findPortalInChunk(Chunk chunk) {
-        Stream<Map.Entry<BlockPos, TileEntity>> stream = chunk.getBlockEntities()
+    private BlockPos findPortalInChunk(LevelChunk chunk) {
+        Stream<Map.Entry<BlockPos, BlockEntity>> stream = chunk.getBlockEntities()
                 .entrySet()
                 .stream()
                 .filter(entry -> entry.getValue() instanceof TileentityTeleporter);
@@ -75,10 +75,12 @@ public class MiningDimensionTeleporter implements ITeleporter {
         return null;
     }
 
-    private BlockPos placeTeleporterMining(ServerWorld world, Chunk chunk) {
+    private BlockPos placeTeleporterMining(ServerLevel world, LevelChunk chunk) {
         boolean deep = Main.SERVER_CONFIG.spawnDeep.get();
-        BlockPos.Mutable pos = new BlockPos.Mutable();
-        for (int y = deep ? 0 : world.getHeight() - 1; (deep ? y < world.getHeight() - 1 : y >= 0); y = (deep ? y + 1 : y - 1)) {
+        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+        int min = world.getMinBuildHeight();
+        int max = world.getMaxBuildHeight();
+        for (int y = deep ? min : max - 1; (deep ? y < max - 1 : y >= min); y = (deep ? y + 1 : y - 1)) {
             for (int x = 0; x < 16; x++) {
                 for (int z = 0; z < 16; z++) {
                     pos.set(x, y, z);
@@ -91,7 +93,7 @@ public class MiningDimensionTeleporter implements ITeleporter {
             }
         }
 
-        for (int y = deep ? 0 : world.getHeight() - 1; (deep ? y < world.getHeight() - 1 : y >= 0); y = (deep ? y + 1 : y - 1)) {
+        for (int y = deep ? min : max - 1; (deep ? y < max - 1 : y >= min); y = (deep ? y + 1 : y - 1)) {
             for (int x = 0; x < 16; x++) {
                 for (int z = 0; z < 16; z++) {
                     pos.set(x, y, z);
@@ -130,12 +132,12 @@ public class MiningDimensionTeleporter implements ITeleporter {
         return null;
     }
 
-    private boolean isAirOrStone(Chunk chunk, BlockPos pos) {
+    private boolean isAirOrStone(LevelChunk chunk, BlockPos pos) {
         BlockState state = chunk.getBlockState(pos);
         return state.getBlock().equals(Blocks.STONE) || state.isAir();
     }
 
-    private boolean isReplaceable(World world, BlockPos pos) {
+    private boolean isReplaceable(Level world, BlockPos pos) {
         BlockState state = world.getBlockState(pos);
         return state.getBlock().equals(Blocks.STONE) ||
                 state.getBlock().equals(Blocks.GRANITE) ||
@@ -147,11 +149,11 @@ public class MiningDimensionTeleporter implements ITeleporter {
                 state.isAir();
     }
 
-    private BlockPos placeTeleporterOverworld(ServerWorld world, Chunk chunk) {
-        BlockPos.Mutable pos = new BlockPos.Mutable();
+    private BlockPos placeTeleporterOverworld(ServerLevel world, LevelChunk chunk) {
+        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
-                for (int y = 63; y < 255; y++) { // TODO world height & sea level in 1.17
+                for (int y = world.getSeaLevel(); y < world.getMaxBuildHeight(); y++) {
                     pos.set(x, y, z);
                     if (chunk.getBlockState(pos).isAir() && chunk.getBlockState(pos.above(1)).isAir()) {
                         BlockPos absolutePos = chunk.getPos().getWorldPosition().offset(pos.getX(), pos.getY(), pos.getZ());
