@@ -55,7 +55,7 @@ Removes canyons and increases the amount of caves massively.
 
 ## Compatibility
 
-These data packs are compatible with version `1.16.2-1.0.1` and newer.
+These data packs are compatible with version `1.16.2-1.0.1` up to `1.16.5-1.0.6`.
 
 ---
 
