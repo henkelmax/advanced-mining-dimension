@@ -5,7 +5,7 @@
   "refmap": "mining_dimension.refmap.json",
   "minVersion": "0.8",
   "client": [
-    "MinecraftMixin"
+    "WorldOpenFlowsMixin"
   ],
   "injectors": {
     "defaultRequire": 1

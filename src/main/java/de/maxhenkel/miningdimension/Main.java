@@ -13,12 +13,14 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -29,21 +31,28 @@ public class Main {
 
     public static final Logger LOGGER = LogManager.getLogger(MODID);
 
-    public static BlockTeleporter TELEPORTER;
-    public static BlockEntityType<TileentityTeleporter> TELEPORTER_TILEENTITY;
+    private static final DeferredRegister<Block> BLOCK_REGISTER = DeferredRegister.create(ForgeRegistries.BLOCKS, Main.MODID);
+    private static final DeferredRegister<Item> ITEM_REGISTER = DeferredRegister.create(ForgeRegistries.ITEMS, Main.MODID);
+    public static final RegistryObject<BlockTeleporter> TELEPORTER = BLOCK_REGISTER.register("teleporter", BlockTeleporter::new);
+    public static final RegistryObject<Item> TELEPORTER_ITEM = ITEM_REGISTER.register("teleporter", () -> TELEPORTER.get().toItem());
+
+    private static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_REGISTER = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, Main.MODID);
+    public static final RegistryObject<BlockEntityType<TileentityTeleporter>> TELEPORTER_TILEENTITY = BLOCK_ENTITY_REGISTER.register("teleporter", () -> BlockEntityType.Builder.of(TileentityTeleporter::new, TELEPORTER.get()).build(null));
+
     public static ResourceKey<Level> MINING_DIMENSION;
 
     public static ServerConfig SERVER_CONFIG;
     public static ClientConfig CLIENT_CONFIG;
 
     public Main() {
-        FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(Item.class, this::registerItems);
-        FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(Block.class, this::registerBlocks);
-        FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(BlockEntityType.class, this::registerTileEntities);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::commonSetup);
 
         SERVER_CONFIG = CommonRegistry.registerConfig(ModConfig.Type.SERVER, ServerConfig.class, true);
         CLIENT_CONFIG = CommonRegistry.registerConfig(ModConfig.Type.CLIENT, ClientConfig.class);
+
+        BLOCK_REGISTER.register(FMLJavaModLoadingContext.get().getModEventBus());
+        ITEM_REGISTER.register(FMLJavaModLoadingContext.get().getModEventBus());
+        BLOCK_ENTITY_REGISTER.register(FMLJavaModLoadingContext.get().getModEventBus());
     }
 
     @SubscribeEvent
@@ -53,24 +62,5 @@ public class Main {
         MINING_DIMENSION = ResourceKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(Main.MODID, "mining"));
     }
 
-    @SubscribeEvent
-    public void registerItems(RegistryEvent.Register<Item> event) {
-        event.getRegistry().registerAll(
-                TELEPORTER.toItem()
-        );
-    }
-
-    @SubscribeEvent
-    public void registerBlocks(RegistryEvent.Register<Block> event) {
-        TELEPORTER = new BlockTeleporter();
-        event.getRegistry().register(TELEPORTER);
-    }
-
-    @SubscribeEvent
-    public void registerTileEntities(RegistryEvent.Register<BlockEntityType<?>> event) {
-        TELEPORTER_TILEENTITY = BlockEntityType.Builder.of(TileentityTeleporter::new, TELEPORTER).build(null);
-        TELEPORTER_TILEENTITY.setRegistryName(new ResourceLocation(MODID, "teleporter"));
-        event.getRegistry().register(TELEPORTER_TILEENTITY);
-    }
 
 }

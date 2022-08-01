@@ -5,7 +5,6 @@
       "type": "minecraft:fixed",
       "biome": "mining_dimension:mining"
     },
-    "seed": 0,
     "settings": "mining_dimension:mining",
     "type": "minecraft:noise"
   }

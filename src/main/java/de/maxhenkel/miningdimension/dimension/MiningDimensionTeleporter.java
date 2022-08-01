@@ -86,7 +86,7 @@ public class MiningDimensionTeleporter implements ITeleporter {
                     pos.set(x, y, z);
                     if (chunk.getBlockState(pos).isAir() && chunk.getBlockState(pos.above(1)).isAir() && chunk.getBlockState(pos.above(2)).isAir()) {
                         BlockPos absolutePos = chunk.getPos().getWorldPosition().offset(pos.getX(), pos.getY(), pos.getZ());
-                        world.setBlockAndUpdate(absolutePos, Main.TELEPORTER.defaultBlockState());
+                        world.setBlockAndUpdate(absolutePos, Main.TELEPORTER.get().defaultBlockState());
                         return absolutePos;
                     }
                 }
@@ -110,7 +110,7 @@ public class MiningDimensionTeleporter implements ITeleporter {
                                 isReplaceable(world, absolutePos.above(2).relative(Direction.EAST)) &&
                                 isReplaceable(world, absolutePos.above(2).relative(Direction.WEST))
                         ) {
-                            world.setBlockAndUpdate(absolutePos, Main.TELEPORTER.defaultBlockState());
+                            world.setBlockAndUpdate(absolutePos, Main.TELEPORTER.get().defaultBlockState());
                             world.setBlockAndUpdate(absolutePos.above(1), Blocks.AIR.defaultBlockState());
                             world.setBlockAndUpdate(absolutePos.above(2), Blocks.AIR.defaultBlockState());
                             world.setBlockAndUpdate(absolutePos.above(3), Blocks.STONE.defaultBlockState());
@@ -157,7 +157,7 @@ public class MiningDimensionTeleporter implements ITeleporter {
                     pos.set(x, y, z);
                     if (chunk.getBlockState(pos).isAir() && chunk.getBlockState(pos.above(1)).isAir()) {
                         BlockPos absolutePos = chunk.getPos().getWorldPosition().offset(pos.getX(), pos.getY(), pos.getZ());
-                        world.setBlockAndUpdate(absolutePos, Main.TELEPORTER.defaultBlockState());
+                        world.setBlockAndUpdate(absolutePos, Main.TELEPORTER.get().defaultBlockState());
                         return absolutePos;
                     }
                 }

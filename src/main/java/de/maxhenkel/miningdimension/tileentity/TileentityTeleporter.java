@@ -8,7 +8,7 @@ import net.minecraft.world.level.block.state.BlockState;
 public class TileentityTeleporter extends BlockEntity {
 
     public TileentityTeleporter(BlockPos pos, BlockState state) {
-        super(Main.TELEPORTER_TILEENTITY, pos, state);
+        super(Main.TELEPORTER_TILEENTITY.get(), pos, state);
     }
 
 }

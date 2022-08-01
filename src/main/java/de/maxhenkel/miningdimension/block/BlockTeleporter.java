@@ -5,8 +5,7 @@ import de.maxhenkel.miningdimension.Main;
 import de.maxhenkel.miningdimension.dimension.MiningDimensionTeleporter;
 import de.maxhenkel.miningdimension.tileentity.TileentityTeleporter;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -29,12 +28,11 @@ public class BlockTeleporter extends Block implements EntityBlock, IItemBlock {
 
     public BlockTeleporter() {
         super(Properties.of(Material.WOOD).strength(3F).sound(SoundType.WOOD));
-        setRegistryName(new ResourceLocation(Main.MODID, "teleporter"));
     }
 
     @Override
     public Item toItem() {
-        return new BlockItem(this, new Item.Properties().tab(CreativeModeTab.TAB_DECORATIONS)).setRegistryName(getRegistryName());
+        return new BlockItem(this, new Item.Properties().tab(CreativeModeTab.TAB_DECORATIONS));
     }
 
     @Override
@@ -53,7 +51,7 @@ public class BlockTeleporter extends Block implements EntityBlock, IItemBlock {
         if (player.level.dimension().equals(Main.MINING_DIMENSION)) {
             ServerLevel teleportWorld = player.server.getLevel(Main.SERVER_CONFIG.overworldDimension);
             if (teleportWorld == null) {
-                Main.LOGGER.error("Could not find overworld dimension '{}'.", Main.SERVER_CONFIG.overworldDimension.getRegistryName());
+                Main.LOGGER.error("Could not find overworld dimension '{}'.", Main.SERVER_CONFIG.overworldDimension.registry());
                 return false;
             }
             player.changeDimension(teleportWorld, new MiningDimensionTeleporter(pos));
@@ -65,7 +63,7 @@ public class BlockTeleporter extends Block implements EntityBlock, IItemBlock {
             }
             player.changeDimension(teleportWorld, new MiningDimensionTeleporter(pos));
         } else {
-            player.displayClientMessage(new TranslatableComponent("message.wrong_dimension"), true);
+            player.displayClientMessage(Component.translatable("message.wrong_dimension"), true);
         }
 
         return true;
