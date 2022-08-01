@@ -3,13 +3,12 @@ buildscript {
         maven { url = 'https://files.minecraftforge.net/maven' }
         maven { url = 'https://repo.spongepowered.org/maven' }
         maven { url = 'https://maven.maxhenkel.de/repository/public' }
-        jcenter()
         mavenCentral()
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
         classpath group: 'de.maxhenkel.forge-update', name: 'forge-update', version: '1.0.4'
-//        classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
+        classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
     }
 }
 
@@ -22,7 +21,7 @@ plugins {
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'forge-update'
 apply plugin: 'idea'
-//apply plugin: 'org.spongepowered.mixin'
+apply plugin: 'org.spongepowered.mixin'
 
 idea {
     module {
@@ -85,12 +84,12 @@ dependencies {
     runtimeOnly fg.deobf("de.maxhenkel.corelib:corelib:${mod_minecraft_version}-${corelib_version}")
     runtimeOnly fg.deobf("de.maxhenkel.corelib:corelib:${mod_minecraft_version}-${corelib_version}:javadoc")
 
-//    annotationProcessor 'org.spongepowered:mixin:0.8:processor'
+    annotationProcessor 'org.spongepowered:mixin:0.8:processor'
 }
 
-/*mixin {
+mixin {
     add sourceSets.main, "mining_dimension.refmap.json"
-}*/
+}
 
 jar {
     manifest {
@@ -101,7 +100,7 @@ jar {
                     "Implementation-Version"  : mod_version,
                     "Implementation-Vendor"   : mod_vendor,
                     "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-//                    "MixinConnector"          : "de.maxhenkel.miningdimension.mixin.MixinConnector"
+                    "MixinConnector"          : "de.maxhenkel.miningdimension.mixin.MixinConnector"
         ])
     }
 }
@@ -220,16 +219,4 @@ shadowJar {
 
 reobf {
     shadowJar {}
-}
-
-sourceSets {
-    main {
-        java {
-            exclude 'de/maxhenkel/miningdimension/mixin/*/**'
-        }
-        resources {
-            exclude 'META-INF/MANIFEST.MF'
-            exclude 'assets/mining_dimension/mining_dimension.mixins.json'
-        }
-    }
 }

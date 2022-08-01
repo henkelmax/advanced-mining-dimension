@@ -29,7 +29,7 @@ public class Main {
 
     public static final Logger LOGGER = LogManager.getLogger(MODID);
 
-    public static final BlockTeleporter TELEPORTER = new BlockTeleporter();
+    public static BlockTeleporter TELEPORTER;
     public static BlockEntityType<TileentityTeleporter> TELEPORTER_TILEENTITY;
     public static ResourceKey<Level> MINING_DIMENSION;
 
@@ -62,9 +62,8 @@ public class Main {
 
     @SubscribeEvent
     public void registerBlocks(RegistryEvent.Register<Block> event) {
-        event.getRegistry().registerAll(
-                TELEPORTER
-        );
+        TELEPORTER = new BlockTeleporter();
+        event.getRegistry().register(TELEPORTER);
     }
 
     @SubscribeEvent
