@@ -1,3 +1,4 @@
+<!-- modrinth_exclude.start -->
 # Advanced Mining Dimension ![](http://cf.way2muchnoise.eu/full_332640_downloads.svg) ![](http://cf.way2muchnoise.eu/versions/332640.svg)
 
 ## Links
@@ -9,6 +10,8 @@
 - [Example Data Packs](datapacks/)
 
 ---
+
+<!-- modrinth_exclude.end -->
 
 This mod adds a highly configurable dimension that only consists of caves.
 Creating the teleporter only requires very basic resources to make it accessible very early in game.
