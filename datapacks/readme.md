@@ -1,5 +1,7 @@
 # Example Customization Data Packs
 
+> **NOTE**: These datapacks are still for the 1.16.5 version of the mod!
+
 This directory contains example data packs, that demonstrate the customization of the mining dimension.
 
 ## How to Install
@@ -55,7 +57,7 @@ Removes canyons and increases the amount of caves massively.
 
 ## Compatibility
 
-These data packs are compatible with version `1.16.2-1.0.1` and newer.
+These data packs are compatible with version `1.16.2-1.0.1` up to `1.16.5-1.0.6`.
 
 ---
 
