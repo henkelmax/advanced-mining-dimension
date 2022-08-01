@@ -10,9 +10,9 @@
   "coordinate_scale": 1,
   "ambient_light": 0,
   "fixed_time": 18000,
-  "logical_height": 192,
+  "logical_height": 384,
   "effects": "minecraft:overworld",
   "infiniburn": "#minecraft:infiniburn_overworld",
   "min_y": -64,
-  "height": 192
+  "height": 384
 }
