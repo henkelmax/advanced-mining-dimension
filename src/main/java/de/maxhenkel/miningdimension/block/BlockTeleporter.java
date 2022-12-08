@@ -31,7 +31,7 @@ public class BlockTeleporter extends Block implements EntityBlock, IItemBlock {
 
     @Override
     public Item toItem() {
-        return new BlockItem(this, new Item.Properties()/*.tab(CreativeModeTab.TAB_DECORATIONS)*/); // TODO Fix creative tab
+        return new BlockItem(this, new Item.Properties());
     }
 
     @Override

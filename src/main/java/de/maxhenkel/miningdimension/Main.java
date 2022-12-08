@@ -4,6 +4,7 @@ import de.maxhenkel.corelib.CommonRegistry;
 import de.maxhenkel.miningdimension.block.BlockTeleporter;
 import de.maxhenkel.miningdimension.config.ClientConfig;
 import de.maxhenkel.miningdimension.config.ServerConfig;
+import de.maxhenkel.miningdimension.events.CreativeTabEvents;
 import de.maxhenkel.miningdimension.tileentity.TileentityTeleporter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -46,6 +47,7 @@ public class Main {
 
     public Main() {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::commonSetup);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(CreativeTabEvents::onCreativeModeTabBuildContents);
 
         SERVER_CONFIG = CommonRegistry.registerConfig(ModConfig.Type.SERVER, ServerConfig.class, true);
         CLIENT_CONFIG = CommonRegistry.registerConfig(ModConfig.Type.CLIENT, ClientConfig.class);
