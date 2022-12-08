@@ -5,7 +5,7 @@ import de.maxhenkel.miningdimension.block.BlockTeleporter;
 import de.maxhenkel.miningdimension.config.ClientConfig;
 import de.maxhenkel.miningdimension.config.ServerConfig;
 import de.maxhenkel.miningdimension.tileentity.TileentityTeleporter;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -59,7 +59,7 @@ public class Main {
     public void commonSetup(FMLCommonSetupEvent event) {
         MinecraftForge.EVENT_BUS.register(this);
 
-        MINING_DIMENSION = ResourceKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(Main.MODID, "mining"));
+        MINING_DIMENSION = ResourceKey.create(Registries.DIMENSION, new ResourceLocation(Main.MODID, "mining"));
     }
 
 

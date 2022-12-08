@@ -1,7 +1,7 @@
 package de.maxhenkel.miningdimension.config;
 
 import de.maxhenkel.corelib.config.ConfigBase;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
@@ -28,7 +28,7 @@ public class ServerConfig extends ConfigBase {
     @Override
     public void onReload(ModConfigEvent event) {
         super.onReload(event);
-        overworldDimension = ResourceKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(overworldDimensionSpec.get()));
+        overworldDimension = ResourceKey.create(Registries.DIMENSION, new ResourceLocation(overworldDimensionSpec.get()));
     }
 
 }
