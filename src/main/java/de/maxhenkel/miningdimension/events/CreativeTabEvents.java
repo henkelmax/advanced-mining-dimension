@@ -11,9 +11,7 @@ public class CreativeTabEvents {
     @SubscribeEvent
     public static void onCreativeModeTabBuildContents(CreativeModeTabEvent.BuildContents event) {
         if (event.getTab() == CreativeModeTabs.FUNCTIONAL_BLOCKS) {
-            event.register((flags, builder, hasPermissions) -> {
-                builder.accept(new ItemStack(Main.TELEPORTER.get()));
-            });
+            event.accept(new ItemStack(Main.TELEPORTER.get()));
         }
     }
 
