@@ -3,9 +3,6 @@
 
 ## Links
 - [CurseForge](https://www.curseforge.com/minecraft/mc-mods/advanced-mining-dimension)
-- [ModRepo](https://modrepo.de/minecraft/mining_dimension/overview)
-- [GitHub](https://github.com/henkelmax/advanced-mining-dimension)
-- [FAQ](https://modrepo.de/minecraft/mining_dimension/faq)
 - [Credits](https://modrepo.de/minecraft/mining_dimension/credits)
 - [Example Data Packs](datapacks/)
 
