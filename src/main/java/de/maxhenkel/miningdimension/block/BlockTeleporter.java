@@ -20,13 +20,13 @@ import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
 
 public class BlockTeleporter extends Block implements EntityBlock, IItemBlock {
 
     public BlockTeleporter() {
-        super(Properties.of(Material.WOOD).strength(3F).sound(SoundType.WOOD));
+        super(Properties.of().mapColor(MapColor.WOOD).strength(3F).sound(SoundType.WOOD));
     }
 
     @Override
@@ -47,14 +47,14 @@ public class BlockTeleporter extends Block implements EntityBlock, IItemBlock {
             return false;
         }
 
-        if (player.level.dimension().equals(Main.MINING_DIMENSION)) {
+        if (player.level().dimension().equals(Main.MINING_DIMENSION)) {
             ServerLevel teleportWorld = player.server.getLevel(Main.SERVER_CONFIG.overworldDimension);
             if (teleportWorld == null) {
                 Main.LOGGER.error("Could not find overworld dimension '{}'.", Main.SERVER_CONFIG.overworldDimension.registry());
                 return false;
             }
             player.changeDimension(teleportWorld, new MiningDimensionTeleporter(pos));
-        } else if (player.level.dimension().equals(Main.SERVER_CONFIG.overworldDimension)) {
+        } else if (player.level().dimension().equals(Main.SERVER_CONFIG.overworldDimension)) {
             ServerLevel teleportWorld = player.server.getLevel(Main.MINING_DIMENSION);
             if (teleportWorld == null) {
                 Main.LOGGER.error("Could not find mining dimension.");
