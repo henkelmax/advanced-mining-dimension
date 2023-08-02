@@ -1,7 +1,9 @@
 <!-- modrinth_exclude.start -->
-# Advanced Mining Dimension ![](http://cf.way2muchnoise.eu/full_332640_downloads.svg) ![](http://cf.way2muchnoise.eu/versions/332640.svg)
+
+# Advanced Mining Dimension
 
 ## Links
+- [Modrinth](https://modrinth.com/mod/advanced-mining-dimension)
 - [CurseForge](https://www.curseforge.com/minecraft/mc-mods/advanced-mining-dimension)
 - [Credits](https://modrepo.de/minecraft/mining_dimension/credits)
 - [Example Data Packs](datapacks/)
