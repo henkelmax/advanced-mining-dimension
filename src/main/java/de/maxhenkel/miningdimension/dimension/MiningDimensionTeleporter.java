@@ -7,17 +7,19 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.vehicle.DismountHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.util.ITeleporter;
 
-import java.util.Comparator;
+import javax.annotation.Nullable;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
-import java.util.stream.Stream;
 
 public class MiningDimensionTeleporter implements ITeleporter {
 
@@ -35,47 +37,49 @@ public class MiningDimensionTeleporter implements ITeleporter {
         }
         ServerPlayer player = (ServerPlayer) e;
         LevelChunk chunk = (LevelChunk) destWorld.getChunk(pos);
-        BlockPos teleporterPos = findPortalInChunk(chunk);
+        Vec3 spawnPos = findPortalInChunk(chunk);
 
-        if (teleporterPos == null) {
+        if (spawnPos == null) {
             if (destWorld.dimension().equals(Main.MINING_DIMENSION)) {
-                teleporterPos = placeTeleporterMining(destWorld, chunk);
+                spawnPos = placeTeleporterMining(destWorld, chunk);
             } else {
-                teleporterPos = placeTeleporterOverworld(destWorld, chunk);
+                spawnPos = placeTeleporterOverworld(destWorld, chunk);
             }
         }
-        if (teleporterPos == null) {
+        if (spawnPos == null) {
             return e;
         }
 
         player.giveExperienceLevels(0);
-        player.teleportTo(teleporterPos.getX() + 0.5D, teleporterPos.getY() + 1D, teleporterPos.getZ() + 0.5D);
+        player.teleportTo(spawnPos.x(), spawnPos.y(), spawnPos.z());
         return e;
     }
 
-    private BlockPos findPortalInChunk(LevelChunk chunk) {
-        Stream<Map.Entry<BlockPos, BlockEntity>> stream = chunk.getBlockEntities()
+    @Nullable
+    private Vec3 findPortalInChunk(LevelChunk chunk) {
+        return chunk.getBlockEntities()
                 .entrySet()
                 .stream()
-                .filter(entry -> entry.getValue() instanceof TileentityTeleporter);
-
-        BlockPos teleporter;
-
-        if (Main.SERVER_CONFIG.spawnDeep.get()) {
-            teleporter = stream.sorted(Comparator.comparingInt(o -> o.getKey().getY())).map(Map.Entry::getKey).findFirst().orElse(null);
-        } else {
-            teleporter = stream.sorted((o1, o2) -> o2.getKey().getY() - o1.getKey().getY()).map(Map.Entry::getKey).findFirst().orElse(null);
-        }
-
-        if (teleporter != null) {
-            if (chunk.getBlockState(teleporter.above()).isAir()) {
-                return teleporter;
-            }
-        }
-        return null;
+                .filter(entry -> entry.getValue() instanceof TileentityTeleporter)
+                .sorted((o1, o2) -> {
+                    if (Main.SERVER_CONFIG.spawnDeep.get()) {
+                        return Integer.compare(o1.getKey().getY(), o2.getKey().getY());
+                    } else {
+                        return o2.getKey().getY() - o1.getKey().getY();
+                    }
+                })
+                .map(Map.Entry::getKey)
+                .map(pos -> getTeleporterSpawnPos(chunk.getLevel(), pos))
+                .filter(Objects::nonNull)
+                .findFirst()
+                .orElse(null);
     }
 
-    private BlockPos placeTeleporterMining(ServerLevel world, LevelChunk chunk) {
+    private static Vec3 getTeleporterSpawnPos(Level level, BlockPos blockPos) {
+        return DismountHelper.findSafeDismountLocation(EntityType.PLAYER, level, blockPos.above(), false);
+    }
+
+    private Vec3 placeTeleporterMining(ServerLevel world, LevelChunk chunk) {
         boolean deep = Main.SERVER_CONFIG.spawnDeep.get();
         BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
         int min = world.getMinBuildHeight();
@@ -87,7 +91,7 @@ public class MiningDimensionTeleporter implements ITeleporter {
                     if (chunk.getBlockState(pos).isAir() && chunk.getBlockState(pos.above(1)).isAir() && chunk.getBlockState(pos.above(2)).isAir()) {
                         BlockPos absolutePos = chunk.getPos().getWorldPosition().offset(pos.getX(), pos.getY(), pos.getZ());
                         world.setBlockAndUpdate(absolutePos, Main.TELEPORTER.get().defaultBlockState());
-                        return absolutePos;
+                        return new Vec3(absolutePos.getX() + 0.5, absolutePos.getY() + 1, absolutePos.getZ() + 0.5);
                     }
                 }
             }
@@ -122,7 +126,7 @@ public class MiningDimensionTeleporter implements ITeleporter {
                             world.setBlockAndUpdate(absolutePos.above(2).relative(Direction.SOUTH), Blocks.STONE.defaultBlockState());
                             world.setBlockAndUpdate(absolutePos.above(2).relative(Direction.EAST), Blocks.STONE.defaultBlockState());
                             world.setBlockAndUpdate(absolutePos.above(2).relative(Direction.WEST), Blocks.STONE.defaultBlockState());
-                            return absolutePos;
+                            return new Vec3(absolutePos.getX() + 0.5, absolutePos.getY() + 1, absolutePos.getZ() + 0.5);
                         }
                     }
                 }
@@ -149,16 +153,19 @@ public class MiningDimensionTeleporter implements ITeleporter {
                 state.isAir();
     }
 
-    private BlockPos placeTeleporterOverworld(ServerLevel world, LevelChunk chunk) {
+    private Vec3 placeTeleporterOverworld(ServerLevel world, LevelChunk chunk) {
         BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
-                for (int y = world.getSeaLevel(); y < world.getMaxBuildHeight(); y++) {
+                for (int y = world.getMaxBuildHeight(); y >= world.getMinBuildHeight(); y--) {
                     pos.set(x, y, z);
-                    if (chunk.getBlockState(pos).isAir() && chunk.getBlockState(pos.above(1)).isAir()) {
+                    if (chunk.getBlockState(pos).isAir() &&
+                            chunk.getBlockState(pos.above(1)).isAir() &&
+                            chunk.getBlockState(pos.above(2)).isAir() &&
+                            !chunk.getBlockState(pos.below()).isAir()) {
                         BlockPos absolutePos = chunk.getPos().getWorldPosition().offset(pos.getX(), pos.getY(), pos.getZ());
                         world.setBlockAndUpdate(absolutePos, Main.TELEPORTER.get().defaultBlockState());
-                        return absolutePos;
+                        return new Vec3(absolutePos.getX() + 0.5, absolutePos.getY() + 1, absolutePos.getZ() + 0.5);
                     }
                 }
             }
