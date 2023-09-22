@@ -47,16 +47,18 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
     maven { url = 'https://maven.maxhenkel.de/repository/public' }
+    maven { url = 'https://maven.minecraftforge.net' }
     maven {
         url = 'https://api.modrinth.com/maven'
         content {
             includeGroup 'maven.modrinth'
         }
     }
+    mavenLocal()
 }
 
 dependencies {
-    minecraft "net.neoforged:forge:${mod_minecraft_version}-${forge_version}"
+    minecraft "net.minecraftforge:forge:${mod_minecraft_version}-${forge_version}"
 
     shadow fg.deobf("de.maxhenkel.corelib:corelib:${mod_minecraft_version}-${corelib_version}:api")
     runtimeOnly fg.deobf("de.maxhenkel.corelib:corelib:${mod_minecraft_version}-${corelib_version}")
@@ -116,7 +118,6 @@ curseforge {
         releaseType = release_type
         addGameVersion mod_minecraft_version
         addGameVersion 'Forge'
-        addGameVersion 'NeoForge'
         addGameVersion "Java ${java_version}"
         mainArtifact(jar) {
             displayName = "[${mod_minecraft_version}] ${mod_name} ${mod_version}"
@@ -139,7 +140,7 @@ modrinth {
     versionType = release_type.toUpperCase()
     changelog = file('changelog.md').text
     gameVersions = [mod_minecraft_version]
-    loaders = ['forge', 'neoforge']
+    loaders = ['forge']
 }
 tasks.modrinth.dependsOn(build)
 

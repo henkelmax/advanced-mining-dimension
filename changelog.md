@@ -1,1 +1,1 @@
-- Fixed teleporter placement
+- Updated to 1.20.2
