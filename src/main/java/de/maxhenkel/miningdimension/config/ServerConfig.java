@@ -5,17 +5,17 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
+import net.neoforged.fml.event.config.ModConfigEvent;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 public class ServerConfig extends ConfigBase {
 
-    private final ForgeConfigSpec.ConfigValue<String> overworldDimensionSpec;
-    public final ForgeConfigSpec.BooleanValue spawnDeep;
+    private final ModConfigSpec.ConfigValue<String> overworldDimensionSpec;
+    public final ModConfigSpec.BooleanValue spawnDeep;
 
     public ResourceKey<Level> overworldDimension;
 
-    public ServerConfig(ForgeConfigSpec.Builder builder) {
+    public ServerConfig(ModConfigSpec.Builder builder) {
         super(builder);
         overworldDimensionSpec = builder
                 .comment("The dimension from where you can teleport to the mining dimension and back")

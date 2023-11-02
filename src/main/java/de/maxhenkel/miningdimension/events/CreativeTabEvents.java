@@ -3,8 +3,8 @@ package de.maxhenkel.miningdimension.events;
 import de.maxhenkel.miningdimension.Main;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 
 public class CreativeTabEvents {
 
