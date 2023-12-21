@@ -8,6 +8,7 @@ version = "${mod_version}"
 displayName = "Advanced Mining Dimension"
 updateJSONURL = "https://update.maxhenkel.de/forge/mining_dimension"
 displayURL = "https://www.curseforge.com/minecraft/mc-mods/advanced-mining-dimension"
+logoFile = "icon.png"
 authors = "Max Henkel"
 description = '''A dimension consisting just of caves'''
 [[dependencies.mining_dimension]]

@@ -1,1 +1,1 @@
-- Fixed teleporter placement
+- Added mod icon
