@@ -13,13 +13,13 @@ authors = "Max Henkel"
 description = '''A dimension consisting just of caves'''
 [[dependencies.mining_dimension]]
 modId = "neoforge"
-mandatory = true
+type = "required"
 versionRange = "${neoforge_dependency}"
 ordering = "NONE"
 side = "BOTH"
 [[dependencies.mining_dimension]]
 modId = "minecraft"
-mandatory = true
+type = "required"
 versionRange = "[${minecraft_version}]"
 ordering = "NONE"
 side = "BOTH"
