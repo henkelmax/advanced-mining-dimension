@@ -17,7 +17,7 @@
     }
   },
   "result": {
-    "item": "mining_dimension:teleporter",
+    "id": "mining_dimension:teleporter",
     "count": 1
   },
   "mirrored": true

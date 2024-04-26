@@ -47,8 +47,8 @@ public class Main {
         eventBus.addListener(this::commonSetup);
         eventBus.addListener(CreativeTabEvents::onCreativeModeTabBuildContents);
 
-        SERVER_CONFIG = CommonRegistry.registerConfig(ModConfig.Type.SERVER, ServerConfig.class, true);
-        CLIENT_CONFIG = CommonRegistry.registerConfig(ModConfig.Type.CLIENT, ClientConfig.class);
+        SERVER_CONFIG = CommonRegistry.registerConfig(MODID, ModConfig.Type.SERVER, ServerConfig.class, true);
+        CLIENT_CONFIG = CommonRegistry.registerConfig(MODID, ModConfig.Type.CLIENT, ClientConfig.class);
 
         BLOCK_REGISTER.register(eventBus);
         ITEM_REGISTER.register(eventBus);
