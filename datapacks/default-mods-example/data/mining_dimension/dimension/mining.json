@@ -1,0 +1,12 @@
+{
+  "generator": {
+    "type": "minecraft:noise",
+    "biome_source": {
+      "type": "minecraft:fixed",
+      "biome": "mining_dimension:mining"
+    },
+    "seed": 0,
+    "settings": "mining_dimension:mining"
+  },
+  "type": "mining_dimension:mining"
+}

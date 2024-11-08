@@ -1,0 +1,63 @@
+{
+  "temperature": 0.6,
+  "downfall": 0,
+  "has_precipitation": false,
+  "effects": {
+    "sky_color": 0,
+    "fog_color": 0,
+    "water_color": 4159204,
+    "water_fog_color": 329011,
+    "mood_sound": {
+      "sound": "minecraft:ambient.cave",
+      "tick_delay": 6000,
+      "block_search_extent": 8,
+      "offset": 2
+    }
+  },
+  "spawners": {
+    "water_ambient": [],
+    "misc": []
+  },
+  "spawn_costs": {},
+  "carvers": {
+    "air": ["minecraft:cave", "minecraft:canyon"]
+  },
+  "features": [
+    [
+      "minecraft:lake_lava_underground",
+      "minecraft:monster_room",
+      "minecraft:ore_dirt",
+      "minecraft:ore_gravel",
+      "minecraft:ore_granite_lower",
+      "minecraft:ore_diorite_lower",
+      "minecraft:ore_andesite_lower",
+      "minecraft:ore_coal_upper",
+      "minecraft:ore_iron_middle",
+      "minecraft:ore_gold",
+      "minecraft:ore_redstone",
+      "minecraft:ore_diamond",
+      "minecraft:ore_lapis",
+      "minecraft:disk_sand",
+      "minecraft:disk_clay",
+      "minecraft:disk_gravel",
+      "bigreactors:yellorite_ore",
+      "bigreactors:yellorite_deepslate_ore",
+      "bigreactors:benitoite_ore",
+      "immersiveengineering:bauxite",
+      "immersiveengineering:deep_nickel",
+      "immersiveengineering:lead",
+      "immersiveengineering:mineral_veins",
+      "immersiveengineering:nickel",
+      "immersiveengineering:silver",
+      "immersiveengineering:uranium",
+      "thermal:apatite_ore",
+      "thermal:cinnabar_ore",
+      "thermal:lead_ore",
+      "thermal:nickel_ore",
+      "thermal:niter_ore",
+      "thermal:silver_ore",
+      "thermal:sulfur_ore",
+      "thermal:tin_ore"
+    ]
+  ]
+}
